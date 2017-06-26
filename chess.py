@@ -331,8 +331,10 @@ def checkEchec():
     for X in range(0, 8):
         for Y in range(0, 8):
             pion = getPion(X, Y)
-            if (pion == 5 and isPossible(X, Y, possibleBlanc) == 1) or (pion == -5 and isPossible(X, Y, possibleNoir) == 1):
+            if (pion == 5 and isPossible(X, Y, possibleBlanc) == 1):
                 return 1
+            if (pion == -5 and isPossible(X, Y, possibleNoir) == 1):
+                return -1
     return 0
 
 def button1(event):
