@@ -10,3 +10,6 @@ Missing functionalities:
 - Roca
 - Prise en passant
 - IA to play alone
+
+Possible improvements :
+- Play through network
