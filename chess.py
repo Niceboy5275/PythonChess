@@ -2,11 +2,6 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename, asksaveasfilename 
 import csv
 
-def donothing():
-   filewin = Toplevel(fenetre)
-   button = Button(filewin, text="Do nothing button")
-   button.pack()
-
 def newGame():
     global tableau
     global curPlayer
