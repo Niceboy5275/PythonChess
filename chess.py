@@ -385,16 +385,8 @@ def button1(event):
                 else :
                     showEchec()
                 curPlayer = curPlayer * (-1)
-                if curPlayer == 1:
-                    curPlayerName.set("Joueur noir")
-                else:
-                    curPlayerName.set("Joueur blanc")                
             else:
                 curPlayer = curPlayer * (-1)
-                if curPlayer == 1:
-                    curPlayerName.set("Joueur noir")
-                else:
-                    curPlayerName.set("Joueur blanc")
         computePossible()
         resetPossible()
     draw()
@@ -410,6 +402,10 @@ def showEchecEtMat():
     label1.pack()
 
 def draw():
+    if curPlayer == 1:
+        curPlayerName.set("Joueur noir")
+    else:
+        curPlayerName.set("Joueur blanc")
     for X in range(0,8):
         for Y in range(0,8):
             if ((X+Y) % 2 == 0):
