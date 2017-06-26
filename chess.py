@@ -1,4 +1,61 @@
-from tkinter import * 
+from tkinter import *
+from tkinter.filedialog import askopenfilename, asksaveasfilename 
+import csv
+
+def donothing():
+   filewin = Toplevel(fenetre)
+   button = Button(filewin, text="Do nothing button")
+   button.pack()
+
+def newGame():
+    global tableau
+    global curPlayer
+    print ("called newGame")
+    tableau = [[1,2,3,4,5,3,2,1],
+           [6,6,6,6,6,6,6,6],
+           [0,0,0,0,0,0,0,0],
+           [0,0,0,0,0,0,0,0],
+           [0,0,0,0,0,0,0,0],
+           [0,0,0,0,0,0,0,0],
+           [-6,-6,-6,-6,-6,-6,-6,-6],
+           [-1,-2,-3,-4,-5,-3,-2,-1]]
+    curPlayer = -1
+    computePossible()
+    draw()
+   
+def openFile():
+    global curPlayer
+    filename = askopenfilename(filetypes=(("Chess files", "*.chy"),
+                                           ("All files", "*.*") ))
+    print ("file : " + filename)
+    if filename != "":
+        for X in range(0, 8):
+            for Y in range(0, 8):
+                tableau[X][Y]=0
+        with open(filename) as f:
+            content = f.readlines()
+            f.close()
+        for line in content:
+            print ("data : " + line)
+            values = line.split(',')
+            print(values)
+            tableau[int(values[1])][int(values[0])]=int(values[2].replace('\n', ''))
+        curPlayer = -1
+        computePossible()
+        draw()
+
+def saveFile():
+    filename = asksaveasfilename(filetypes=(("Chess files", "*.chy"),
+                                      ("All files", "*.*") ))
+    print ("file : " + filename)
+    if filename != "":
+        file = open(filename, 'w')
+        for Y in range(0, 8):
+            for X in range(0, 8):
+                pion = getPion(X, Y)
+                if (pion != 0):
+                    file.write(str(X)+","+str(Y)+","+str(pion)+"\n")
+        file.close()
 
 tableau = [[1,2,3,4,5,3,2,1],
            [6,6,6,6,6,6,6,6],
@@ -9,37 +66,14 @@ tableau = [[1,2,3,4,5,3,2,1],
            [-6,-6,-6,-6,-6,-6,-6,-6],
            [-1,-2,-3,-4,-5,-3,-2,-1]]
 
-possible= [[0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0]]
+possible= set()
 
-possibleBlanc= [[0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0]]
+possibleBlanc= set()
 
-possibleNoir= [[0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0],
-           [0,0,0,0,0,0,0,0]]
+possibleNoir= set()
 
 def resetPossible(array=possible):
-    for X in range(0, 8):
-        for Y in range(0, 8):
-            array[X][Y] = 0
+    array.clear()
 
 def computePossible():
     for X in range(0, 8):
@@ -77,48 +111,44 @@ def getPion(pos_x, pos_y):
     return tableau[pos_y][pos_x]
 
 def setPossible(pos_x, pos_y, color = 0, array=possible):
-    if (getPion(pos_x, pos_y) != None and getPion(pos_x, pos_y) * color <= 0):
-        array[pos_y][pos_x] = 1
+    if ((getPion(pos_x, pos_y) != None) and (getPion(pos_x, pos_y) * color <= 0)):
+        array.add((pos_x, pos_y))
 
 def isPossible(pos_x, pos_y, array=possible):
-    return array[pos_y][pos_x] == 1
+    return (pos_x, pos_y) in array
 
 def moveRoi(pos_x, pos_y, array=possible):
-    pos=set()
+    movePossible = 0
     curColor = getPion(pos_x, pos_y)
-    if (getPion(pos_x - 1, pos_y - 1) != None):
-        pos.add((pos_x - 1, pos_y - 1))
+    if (curColor > 0):
+        opponent = possibleBlanc
+    else:
+        opponent = possibleNoir
+    if (getPion(pos_x - 1, pos_y - 1) != None) and not isPossible(pos_x - 1, pos_y - 1,opponent):
         setPossible(pos_x - 1, pos_y - 1, curColor, array)
-        isPossible = True
-    if (getPion(pos_x - 1, pos_y) != None):
-        pos.add((pos_x - 1, pos_y))
+        movePossible = movePossible + 1
+    if (getPion(pos_x - 1, pos_y) != None) and not isPossible(pos_x - 1, pos_y,opponent):
         setPossible(pos_x - 1, pos_y, curColor, array)
-        isPossible = True
-    if (getPion(pos_x - 1, pos_y + 1) != None):
-        pos.add((pos_x - 1, pos_y + 1))        
+        movePossible = movePossible + 2
+    if (getPion(pos_x - 1, pos_y + 1) != None) and not isPossible(pos_x - 1, pos_y + 1,opponent):
         setPossible(pos_x - 1, pos_y + 1, curColor, array)
-        isPossible = True
-    if (getPion(pos_x, pos_y + 1) != None):
-        pos.add((pos_x, pos_y + 1))        
+        movePossible = movePossible + 4
+    if (getPion(pos_x, pos_y + 1) != None) and not isPossible(pos_x, pos_y + 1,opponent):
         setPossible(pos_x, pos_y + 1, curColor, array)
-        isPossible = True
-    if (getPion(pos_x + 1, pos_y + 1) != None):
-        pos.add((pos_x + 1, pos_y + 1))        
+        movePossible = movePossible + 8
+    if (getPion(pos_x + 1, pos_y + 1) != None) and not isPossible(pos_x + 1, pos_y + 1,opponent):
         setPossible(pos_x + 1, pos_y + 1, curColor, array)
-        isPossible = True
-    if (getPion(pos_x + 1, pos_y) != None):
-        pos.add((pos_x + 1, pos_y))        
+        movePossible = movePossible + 16
+    if (getPion(pos_x + 1, pos_y) != None) and not isPossible(pos_x + 1, pos_y,opponent):
         setPossible(pos_x + 1, pos_y, curColor, array)
-        isPossible = True
-    if (getPion(pos_x + 1, pos_y - 1) != None):
-        pos.add((pos_x + 1, pos_y - 1))        
+        movePossible = movePossible + 32
+    if (getPion(pos_x + 1, pos_y - 1) != None) and not isPossible(pos_x + 1, pos_y - 1,opponent):
         setPossible(pos_x + 1, pos_y - 1, curColor, array)
-        isPossible = True
-    if (getPion(pos_x, pos_y - 1) != None):
-        pos.add((pos_x, pos_y - 1))        
+        movePossible = movePossible + 64
+    if (getPion(pos_x, pos_y - 1) != None) and not isPossible(pos_x, pos_y - 1,opponent):
         setPossible(pos_x, pos_y - 1, curColor, array)
-        isPossible = True
-    return pos
+        movePossible = movePossible + 128
+    return movePossible
 
 def moveCavalier(pos_x, pos_y, array=possible):
     curColor = getPion(pos_x, pos_y)
@@ -219,16 +249,79 @@ def movePionBlanc(pos_x, pos_y, array=possible):
     if getPion(pos_x+1, pos_y - 1) != None and getPion(pos_x+1, pos_y - 1) > 0:
         setPossible(pos_x+1, pos_y - 1, 0, array)
 
-def checkMat(pos_x, pos_y, color):
+def checkMat():
+    print ("Call checkMat")
     for X in range(0, 8):
         for Y in range(0, 8):
             pion = getPion(X, Y)
-            if pion == 5 and curColor == -1:
-                if (len(moveRoi(X, Y)) != 0):
-                    return False
-            if pion == -5 and curColor == 1:
-                if (len(moveRoi(X, Y)) != 0):
-                    return False
+            if (pion == 5 and curPlayer == -1) or (pion == -5 and curPlayer == 1):
+                roi_X = X
+                roi_Y = Y
+                posPion = set()
+                moveRoi(X, Y, posPion)
+                for (posRoiX, posRoiY) in posPion:
+                    print ("a - position moved : " + str(posRoiX) + "/" + str(posRoiY))
+                    oldValue = tableau[posRoiY][posRoiX]
+                    tableau[posRoiY][posRoiX] = pion
+                    tableau[Y][X] = 0
+                    # compute Possible
+                    resetPossible(possibleBlanc)
+                    resetPossible(possibleNoir)
+                    computePossible()
+                    tableau[Y][X] = pion
+                    tableau[posRoiY][posRoiX] = oldValue
+
+                    # TODO Finish the check for the Mat
+                    if curPlayer == 1 and not isPossible(posRoiX, posRoiY, possibleNoir):
+                        print ("False - 1a")
+                        return False
+                    if curPlayer == -1 and not isPossible(posRoiX, posRoiY, possibleBlanc):
+                        for (a,b) in possibleNoir:
+                           print ("N : " + str(a) + "/" + str(b))
+                        for (a,b) in possibleBlanc:
+                           print ("B : " + str(a) + "/" + str(b))
+                        print ("False - 1b")                        
+                        return False
+                
+    # Check if by moving a piece, there is still mat position
+    for X in range(0, 8):
+        for Y in range(0, 8):
+            pion = getPion(X, Y)
+            if (pion * curPlayer) < 0:
+                print ("2 - Check : " + str(X) + "/" + str(Y))
+                posPion = set()
+                if abs(pion) == 2:
+                    moveCavalier(X, Y, posPion)
+                if abs(pion) == 1:
+                    moveTour(X, Y, posPion)
+                if abs(pion) == 3:
+                    moveFou(X, Y, posPion)
+                if abs(pion) == 4:
+                    moveFou(X, Y, posPion)
+                    moveTour(X, Y, posPion)
+                if pion == -6:
+                    movePionBlanc(X, Y, posPion)
+                if pion == 6:
+                    movePionNoir(X, Y, posPion)
+                for (posPion_X, posPion_Y) in posPion:
+                    print ("b - position moved : " + str(posPion_X) + "/" + str(posPion_Y))
+                    oldValue = tableau[posPion_Y][posPion_X]
+                    tableau[posPion_Y][posPion_X] = pion
+                    tableau[Y][X] = 0
+                    # compute Possible
+                    resetPossible(possibleBlanc)
+                    resetPossible(possibleNoir)
+                    computePossible()
+                    tableau[Y][X] = pion
+                    tableau[posPion_Y][posPion_X] = oldValue
+
+                    # TODO Finish the check for the Mat
+                    if curPlayer == 1 and not isPossible(roi_X, roi_Y, possibleNoir):
+                        print ("False - 2")
+                        return False
+                    if curPlayer == -1 and not isPossible(roi_X, roi_Y, possibleBlanc):
+                        print ("False - 3")                        
+                        return False
     return True
     
 def checkEchec():
@@ -238,10 +331,8 @@ def checkEchec():
     for X in range(0, 8):
         for Y in range(0, 8):
             pion = getPion(X, Y)
-            if pion == 5 and isPossible(X, Y, possibleBlanc) == 1:
+            if (pion == 5 and isPossible(X, Y, possibleBlanc) == 1) or (pion == -5 and isPossible(X, Y, possibleNoir) == 1):
                 return 1
-            if pion == -5 and isPossible(X, Y, possibleNoir) == 1:
-                return -1
     return 0
 
 def button1(event):
@@ -287,9 +378,10 @@ def button1(event):
                 tableau[pos_y][pos_x]=0
                 tableau[init_y][init_x]=selectedPion
             elif (echec == (-1 * curPlayer)):
-                showEchec()
                 if (checkMat()):
                     showEchecEtMat()
+                else :
+                    showEchec()
                 curPlayer = curPlayer * (-1)
                 if curPlayer == 1:
                     curPlayerName.set("Joueur noir")
@@ -324,12 +416,12 @@ def draw():
                 color = 'grey'
             canvas.create_rectangle(10 + 40 * X,10 + 40 * Y, 50 + 40 * X, 50 + 40 * Y, fill=color)
             if (noirsCB.get() == 1):
-                if (possibleNoir[Y][X] == 1):
+                if (isPossible(X, Y, possibleNoir)):
                     canvas.create_rectangle(10 + 40 * X,10 + 40 * Y, 30 + 40 * X, 50 + 40 * Y, fill='green')
             if (blancsCB.get() == 1):
-                if (possibleBlanc[Y][X] == 1):
+                if (isPossible(X, Y, possibleBlanc)):
                     canvas.create_rectangle(30 + 40 * X,10 + 40 * Y, 50 + 40 * X, 50 + 40 * Y, fill='yellow')
-            if (possible[Y][X] == 1):
+            if (isPossible(X, Y, possible)):
                 canvas.create_rectangle(10 + 40 * X,10 + 40 * Y, 50 + 40 * X, 50 + 40 * Y, fill='red')
             pion=None
             if (tableau[Y][X] == 1):
@@ -359,6 +451,19 @@ def draw():
             canvas.create_image(10 + 40 * X, 10 + 40 * Y, anchor=NW, image=pion)
 
 fenetre = Tk()
+
+menubar = Menu(fenetre)
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="New", command=newGame)
+filemenu.add_command(label="Open", command=openFile)
+filemenu.add_command(label="Save", command=saveFile)
+
+filemenu.add_separator()
+
+filemenu.add_command(label="Exit", command=fenetre.quit)
+menubar.add_cascade(label="File", menu=filemenu)
+
+fenetre.config(menu=menubar)
 fenetre.title("Echecs")
 canvas=Canvas(fenetre, width=340, height=340)
 canvas.grid(row=1, column = 1, columnspan=2, sticky=W)
