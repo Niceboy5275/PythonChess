@@ -2,11 +2,6 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename, asksaveasfilename 
 import csv
 
-def donothing():
-   filewin = Toplevel(fenetre)
-   button = Button(filewin, text="Do nothing button")
-   button.pack()
-
 def newGame():
     global tableau
     global curPlayer
@@ -331,8 +326,10 @@ def checkEchec():
     for X in range(0, 8):
         for Y in range(0, 8):
             pion = getPion(X, Y)
-            if (pion == 5 and isPossible(X, Y, possibleBlanc) == 1) or (pion == -5 and isPossible(X, Y, possibleNoir) == 1):
+            if (pion == 5 and isPossible(X, Y, possibleBlanc) == 1):
                 return 1
+            if (pion == -5 and isPossible(X, Y, possibleNoir) == 1):
+                return -1
     return 0
 
 def button1(event):
@@ -383,16 +380,8 @@ def button1(event):
                 else :
                     showEchec()
                 curPlayer = curPlayer * (-1)
-                if curPlayer == 1:
-                    curPlayerName.set("Joueur noir")
-                else:
-                    curPlayerName.set("Joueur blanc")                
             else:
                 curPlayer = curPlayer * (-1)
-                if curPlayer == 1:
-                    curPlayerName.set("Joueur noir")
-                else:
-                    curPlayerName.set("Joueur blanc")
         computePossible()
         resetPossible()
     draw()
@@ -408,6 +397,10 @@ def showEchecEtMat():
     label1.pack()
 
 def draw():
+    if curPlayer == 1:
+        curPlayerName.set("Joueur noir")
+    else:
+        curPlayerName.set("Joueur blanc")
     for X in range(0,8):
         for Y in range(0,8):
             if ((X+Y) % 2 == 0):
