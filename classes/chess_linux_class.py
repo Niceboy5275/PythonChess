@@ -70,73 +70,6 @@ def saveFile():
                     file.write(str(X)+","+str(Y)+","+pion.getLetter()+"," + pion.getColor() + "\n")
         file.close()
 
-def checkMat():
-    print ("Check Mat")
-    for X in range(0, 8):
-        for Y in range(0, 8):
-            pion = tableau.getPion(X, Y)
-            if type(pion) == roi.roi and ((pion.getColor() == piece._players['NOIR'] and curPlayer == -1) or (pion.getColor() == piece._players['BLANC'] and curPlayer == 1)):
-                roi_X = X
-                roi_Y = Y
-                posPion = set()
-                pion.move(X, Y, tableau, posPion)
-                for (posRoiX, posRoiY) in posPion:
-                    oldValue = tableau.getPion(posRoiX, posRoiY)
-                    tableau.setPion(posRoiX, posRoiY, pion)
-                    tableau.setPion(X, Y, None)
-                    # compute Possible
-                    possibleBlanc = set()
-                    possibleNoir = set()
-                    tableau.computePossible(piece._players['NOIR'], possibleNoir)
-                    tableau.computePossible(piece._players['BLANC'], possibleBlanc)
-                    tableau.setPion(X, Y, pion)
-                    tableau.setPion(posRoiX, posRoiY, oldValue)
-
-                    if curPlayer == 1 and not tableau.isPossible(posRoiX, posRoiY, possibleNoir):
-                        return False
-                    if curPlayer == -1 and not tableau.isPossible(posRoiX, posRoiY, possibleBlanc):
-                        return False
-                
-    # Check if by moving a piece, there is still mat position
-    for X in range(0, 8):
-        for Y in range(0, 8):
-            if pion != None:
-                pion = tableau.getPion(X, Y)
-                if (pion.getColor() * curPlayer) < 0:
-                    posPion = set()
-                    pion.move(X, Y, tableau, posPion)
-                    for (posPion_X, posPion_Y) in posPion:
-                        oldValue = tableau.getPion(posPion_X, posPion_Y)
-                        tableau.setPion(posPion_X, posPion_Y, pion)
-                        tableau.setPion(X, Y, None)
-                        # compute Possible
-                        possibleBlanc = set()
-                        possibleNoir = set()
-                        tableau.computePossible(piece._players['NOIR'], possibleNoir)
-                        tableau.computePossible(piece._players['BLANC'], possibleBlanc)
-                        tableau.setPion(X, Y, pion)
-                        tableau.setPion(posPion_X, posPion_Y, oldValue)
-
-                        if curPlayer == 1 and not tableau.isPossible(roi_X, roi_Y, possibleNoir):
-                            return False
-                        if curPlayer == -1 and not tableau.isPossible(roi_X, roi_Y, possibleBlanc):
-                            return False
-    return True
-    
-def checkEchec():
-    possibleBlanc = set()
-    possibleNoir = set()
-    tableau.computePossible(piece._players['NOIR'], possibleNoir)
-    tableau.computePossible(piece._players['BLANC'], possibleBlanc)
-    for X in range(0, 8):
-        for Y in range(0, 8):
-            pion = tableau.getPion(X, Y)
-            if (type(pion) is roi.roi):
-                if (pion.getColor() == piece._players['NOIR'] and tableau.isPossible(X, Y, possibleBlanc) == 1):
-                    return piece._players['NOIR']
-                if (pion.getColor() == piece._players['BLANC'] and tableau.isPossible(X, Y, possibleNoir) == 1):
-                    return piece._players['BLANC']
-    return 0
 
 def button1(event):
     global selected
@@ -159,15 +92,16 @@ def button1(event):
     else:
         selected = False
         if tableau.isPossible(pos_x, pos_y, possible):
+            oldPion=tableau.getPion(pos_x, pos_y)
             tableau.setPion(pos_x, pos_y, selectedPion)
             tableau.setPion(init_x, init_y, None)
-            echec = checkEchec()
+            echec = tableau.checkEchec(curPlayer)
             if (echec == curPlayer):
                 showEchec()
-                tableau.setPion(pos_x, pos_y, None)
+                tableau.setPion(pos_x, pos_y, oldPion)
                 tableau.setPion(init_x, init_y, selectedPion)
             elif (echec == (-1 * curPlayer)):
-                if (checkMat()):
+                if (tableau.checkMat(curPlayer)):
                     showEchecEtMat()
                 else :
                     showEchec()
@@ -182,10 +116,14 @@ def button1(event):
     draw()
     
 def showEchec():
-    print ("Echec !")
+    toplevel = Toplevel()
+    label1 = Label(toplevel, text="Echec !!")
+    label1.pack()
 
 def showEchecEtMat():
-    print ("Echec et mat !")
+    toplevel = Toplevel()
+    label1 = Label(toplevel, text="Echec et mat!!")
+    label1.pack()
 
 def draw():
     global tableau

@@ -56,7 +56,7 @@ class tableau():
         for X in range(0, 8):
             for Y in range(0, 8):
                 pion = self.getPion(X, Y)
-                if pion != None and pion.getColor() == color and not(type(pion) is roi):
+                if pion != None and pion.getColor() == color:
                     pion.move(X, Y, self, array)
 
     def isPossible(self, pos_x, pos_y, array):
@@ -81,3 +81,102 @@ class tableau():
         if (Y > 7):
             return None
         return self._tableau[X][Y]
+
+    def checkMat(self, curPlayer):
+        for X in range(0, 8):
+            for Y in range(0, 8):
+                pion = self.getPion(X, Y)
+                if type(pion) == roi and ((pion.getColor() == piece._players['NOIR'] and curPlayer == -1) or (pion.getColor() == piece._players['BLANC'] and curPlayer == 1)):
+                    roi_X = X
+                    roi_Y = Y
+                    posPion = set()
+                    pion.move(X, Y, self, posPion)
+                    for (posRoiX, posRoiY) in posPion:
+                        oldValue = self.getPion(posRoiX, posRoiY)
+                        self.setPion(posRoiX, posRoiY, pion)
+                        self.setPion(X, Y, None)
+                        # compute Possible
+                        possibleBlanc = set()
+                        possibleNoir = set()
+                        self.computePossible(piece._players['NOIR'], possibleNoir)
+                        self.computePossible(piece._players['BLANC'], possibleBlanc)
+                        self.setPion(X, Y, pion)
+                        self.setPion(posRoiX, posRoiY, oldValue)
+
+                        if curPlayer == 1 and not self.isPossible(posRoiX, posRoiY, possibleNoir):
+                            print ("CheckMat - 1")
+                            return False
+                        if curPlayer == -1 and not self.isPossible(posRoiX, posRoiY, possibleBlanc):
+                            print ("CheckMat - 2")
+                            return False
+                    
+        # Check if by moving a piece, there is still mat position
+        for X in range(0, 8):
+            for Y in range(0, 8):
+                pion = self.getPion(X, Y)
+                if pion != None:
+                    if (pion.getColor() * curPlayer) < 0:
+                        posPion = set()
+                        pion.move(X, Y, self, posPion)
+                        for (posPion_X, posPion_Y) in posPion:
+                            oldValue = self.getPion(posPion_X, posPion_Y)
+                            self.setPion(posPion_X, posPion_Y, pion)
+                            self.setPion(X, Y, None)
+                            # compute Possible
+                            possibleBlanc = set()
+                            possibleNoir = set()
+                            self.computePossible(piece._players['NOIR'], possibleNoir)
+                            self.computePossible(piece._players['BLANC'], possibleBlanc)
+                            self.setPion(X, Y, pion)
+                            self.setPion(posPion_X, posPion_Y, oldValue)
+                            if (type(pion) == roi):
+                                if curPlayer == 1 and not self.isPossible(posPion_X, posPion_Y, possibleNoir):
+                                    print ("CurPos : " + str(X) + "/" + str(Y))
+                                    print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
+                                    print ("CheckMat - 3")
+                                    return False
+                                if curPlayer == -1 and not self.isPossible(posPion_X, posPion_Y, possibleBlanc):
+                                    print ("CurPos : " + str(X) + "/" + str(Y))
+                                    print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
+                                    for (pX, pY) in possibleBlanc:
+                                        print ("Possible : " + str(pX) + "/" + str(pY))
+                                    print ("CheckMat - 4")
+                                    return False
+                            else:
+                                if curPlayer == 1 and not self.isPossible(roi_X, roi_Y, possibleNoir):
+                                    print ("CurPos : " + str(X) + "/" + str(Y))
+                                    print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
+                                    print ("CheckMat - 3")
+                                    return False
+                                if curPlayer == -1 and not self.isPossible(roi_X, roi_Y, possibleBlanc):
+                                    print ("CurPos : " + str(X) + "/" + str(Y))
+                                    print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
+                                    for (pX, pY) in possibleBlanc:
+                                        print ("Possible : " + str(pX) + "/" + str(pY))
+                                    print ("CheckMat - 4")
+                                    return False
+        return True
+        
+    def checkEchec(self, curPlayer):
+        possibleBlanc = set()
+        possibleNoir = set()
+        self.computePossible(piece._players['NOIR'], possibleNoir)
+        self.computePossible(piece._players['BLANC'], possibleBlanc)
+        noirEchec=False
+        blancEchec=False
+        for X in range(0, 8):
+            for Y in range(0, 8):
+                pion = self.getPion(X, Y)
+                if (type(pion) is roi):
+                    if (pion.getColor() == piece._players['NOIR'] and self.isPossible(X, Y, possibleBlanc) == 1):
+                        noirEchec=True
+                    if (pion.getColor() == piece._players['BLANC'] and self.isPossible(X, Y, possibleNoir) == 1):
+                        blancEchec=True
+        if (noirEchec and blancEchec):
+            return curPlayer
+        elif (noirEchec):
+            return piece._players['NOIR']
+        elif (blancEchec):
+            return piece._players['BLANC']
+        else:              
+            return 0
