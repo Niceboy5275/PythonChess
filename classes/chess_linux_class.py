@@ -87,6 +87,8 @@ def button1(event):
             init_x = pos_x
             init_y = pos_y
             pion.move(pos_x, pos_y, tableau, possible)
+            if type(pion) is roi.roi:
+                pion.checkRoque(tableau, possible)
         else:
             print ("Case non valide")
     else:
@@ -95,18 +97,33 @@ def button1(event):
             oldPion=tableau.getPion(pos_x, pos_y)
             tableau.setPion(pos_x, pos_y, selectedPion)
             tableau.setPion(init_x, init_y, None)
+            if type(selectedPion) is roi.roi:
+                #Check roque position
+                if (init_x - pos_x) * (init_x - pos_x) + (init_y - pos_y) * (init_y - pos_y) == 4:
+                    if init_x > pos_x:
+                        # Left roque
+                        tour = tableau.getPion(0, init_y)
+                        tableau.setPion(3, init_y, tour)
+                        tableau.setPion(0, init_y, None)
+                    else:
+                        #right roque
+                        tour = tableau.getPion(7, init_y)
+                        tableau.setPion(5, init_y, tour)
+                        tableau.setPion(7, init_y, None)
             echec = tableau.checkEchec(curPlayer)
             if (echec == curPlayer):
                 showEchec()
                 tableau.setPion(pos_x, pos_y, oldPion)
                 tableau.setPion(init_x, init_y, selectedPion)
             elif (echec == (-1 * curPlayer)):
+                selectedPion.setMoved()
                 if (tableau.checkMat(curPlayer)):
                     showEchecEtMat()
                 else :
                     showEchec()
                 curPlayer = curPlayer * (-1)
             else:
+                selectedPion.setMoved()
                 curPlayer = curPlayer * (-1)
         else:
             print("Mouvement impossible")
