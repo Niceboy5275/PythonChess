@@ -8,10 +8,34 @@ from reine import reine
 
 class tableau():
     _tableau = [ [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None] ]
+    _selected = False
+    _init_x = -1
+    _init_y = -1
+    _selectedPion = None
 
     def __init__(self):
         self.reset()
 
+    def setPromoted(self, pion, curPlayer):
+        if curPlayer != pion.getColor():
+            return 0
+        self.setPion(self._init_x, self._init_y, pion)       
+        echec = self.checkEchec(curPlayer)
+        if (echec == curPlayer):
+            res = 1
+            self.setPion(pos_x, pos_y, oldPion)
+            self.setPion(self._init_x, self._init_y, self._selectedPion)
+        elif (echec == (-1 * curPlayer)):
+            self._selectedPion.setMoved()
+            if (self.checkMat(curPlayer)):
+                res = 2
+            else :
+                res = 3
+        else:
+            self._selectedPion.setMoved()
+            res = 4
+        return res
+        
     def reset(self):
         for X in range(0, 8):
             for Y in range(2, 6):
@@ -180,3 +204,66 @@ class tableau():
             return piece._players['BLANC']
         else:              
             return 0
+
+    def play(self, pos_x, pos_y, curPlayer, possible):
+        if self._selected == False:
+            pionV = self.getPion(pos_x, pos_y)
+            if (pionV != None and pionV.getColor() * curPlayer) > 0:
+                self._selected = True
+                self._selectedPion = pionV
+                self._init_x = pos_x
+                self._init_y = pos_y
+                pionV.move(pos_x, pos_y, self, possible)
+                if type(pionV) is roi:
+                    pionV.checkRoque(self, possible)
+                res = 5
+            else:
+                print ("Case non valide")
+                res = 6
+        else:
+            self._selected = False
+            if self.isPossible(pos_x, pos_y, possible):
+                oldPion=self.getPion(pos_x, pos_y)
+                self.setPion(pos_x, pos_y, self._selectedPion)
+                self.setPion(self._init_x, self._init_y, None)
+                if type(self._selectedPion) is roi:
+                    #Check roque position
+                    if (self._init_x - pos_x) * (self._init_x - pos_x) + (self._init_y - pos_y) * (self._init_y - pos_y) == 4:
+                        if self._init_x > pos_x:
+                            # Left roque
+                            tour = self.getPion(0, self._init_y)
+                            self.setPion(3, self._init_y, tour)
+                            self.setPion(0, self._init_y, None)
+                        else:
+                            #right roque
+                            tour = self.getPion(7, self._init_y)
+                            self.setPion(5, self._init_y, tour)
+                            self.setPion(7, self._init_y, None)
+                if type(self._selectedPion) is pion:
+                    if pos_y == 7 and self._selectedPion.getColor() == 1:
+                        self._init_x = pos_x
+                        self._init_y = pos_y
+                        return 8
+                    if pos_y == 0 and self._selectedPion.getColor() == -1:
+                        self._init_x = pos_x
+                        self._init_y = pos_y
+                        return 8
+                echec = self.checkEchec(curPlayer)
+                if (echec == curPlayer):
+                    res = 1
+                    self.setPion(pos_x, pos_y, oldPion)
+                    self.setPion(self._init_x, self._init_y, self._selectedPion)
+                elif (echec == (-1 * curPlayer)):
+                    self._selectedPion.setMoved()
+                    if (self.checkMat(curPlayer)):
+                        res = 2
+                    else :
+                        res = 3
+                else:
+                    self._selectedPion.setMoved()
+                    res = 4
+            else:
+                print("Mouvement impossible")
+                res = 7
+            possible.clear()
+        return res
