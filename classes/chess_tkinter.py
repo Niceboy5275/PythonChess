@@ -70,49 +70,24 @@ def saveFile():
                     file.write(str(X)+","+str(Y)+","+pion.getLetter()+"," + pion.getColor() + "\n")
         file.close()
 
-
 def button1(event):
-    global selected
-    global init_x
-    global init_y
-    global selectedPion
+    global possible
     global curPlayer
     pos_x = int((event.x - 10) / 40)
     pos_y = int((event.y - 10) / 40)
-    if selected == False:
-        pion = tableau.getPion(pos_x, pos_y)
-        if (pion != None and pion.getColor() * curPlayer) > 0:
-            selected = True
-            selectedPion = pion
-            init_x = pos_x
-            init_y = pos_y
-            pion.move(pos_x, pos_y, tableau, possible)
-        else:
-            print ("Case non valide")
-    else:
-        selected = False
-        if tableau.isPossible(pos_x, pos_y, possible):
-            oldPion=tableau.getPion(pos_x, pos_y)
-            tableau.setPion(pos_x, pos_y, selectedPion)
-            tableau.setPion(init_x, init_y, None)
-            echec = tableau.checkEchec(curPlayer)
-            if (echec == curPlayer):
-                showEchec()
-                tableau.setPion(pos_x, pos_y, oldPion)
-                tableau.setPion(init_x, init_y, selectedPion)
-            elif (echec == (-1 * curPlayer)):
-                if (tableau.checkMat(curPlayer)):
-                    showEchecEtMat()
-                else :
-                    showEchec()
-                curPlayer = curPlayer * (-1)
-            else:
-                curPlayer = curPlayer * (-1)
-        else:
-            print("Mouvement impossible")
-        tableau.computePossible(piece._players['NOIR'], possibleNoir)
-        tableau.computePossible(piece._players['BLANC'], possibleBlanc)
-        possible.clear()
+    res = tableau.play(pos_x, pos_y, curPlayer, possible)
+    print ("Res : " + str(res))
+    if res == 1:
+        showEchec()
+    elif res == 2:
+        showEchecEtMat()
+    elif res == 3:
+        showEchec()
+        curPlayer = curPlayer * (-1)
+    elif res == 4:
+        curPlayer = curPlayer * (-1)
+    elif res ==8:
+        showPromotion(curPlayer)
     draw()
     
 def showEchec():
@@ -125,6 +100,65 @@ def showEchecEtMat():
     label1 = Label(toplevel, text="Echec et mat!!")
     label1.pack()
 
+def getPromoted(event):
+    global promotion
+    global tableau
+    global curPlayer
+    pos_x = int((event.x - 10) / 40)
+    pos_y = int((event.y - 10) / 40)
+    print ("Promoted : " + str(pos_x) + "/" + str(pos_y))
+    if (pos_y == 1):
+        color = piece._players['BLANC']
+    elif (pos_y == 0):
+        color = piece._players['NOIR']
+    else:
+        return
+    if pos_x == 0:
+        res = tableau.setPromoted(pion.pion(color), curPlayer)
+    elif pos_x == 1:
+        res = tableau.setPromoted(tour.tour(color), curPlayer)
+    elif pos_x == 2:
+        res = tableau.setPromoted(cavalier.cavalier(color), curPlayer)
+    elif pos_x == 3:
+        res = tableau.setPromoted(fou.fou(color), curPlayer)
+    elif pos_x == 4:
+        res = tableau.setPromoted(reine.reine(color), curPlayer)
+    else:
+        return
+    if res == 1:
+        showEchec()
+    elif res == 2:
+        showEchecEtMat()
+    elif res == 3:
+        showEchec()
+        curPlayer = curPlayer * (-1)
+    elif res == 4:
+        curPlayer = curPlayer * (-1)
+    else:
+        return
+    possible.clear()
+    draw()
+    promotion.destroy()
+    
+def showPromotion(color):
+    global promotion
+    promotion = Toplevel()
+    canvas=Canvas(promotion, width=300, height=100)
+    canvas.grid(row=1, column = 1, sticky=W)
+    if (color == 1 or color == 0):
+        canvas.create_image(10, 10, anchor=NW, image=pion_n)
+        canvas.create_image(50, 10, anchor=NW, image=tour_n)
+        canvas.create_image(90, 10, anchor=NW, image=cavalier_n)
+        canvas.create_image(130, 10, anchor=NW, image=fou_n)
+        canvas.create_image(170, 10, anchor=NW, image=reine_n)
+    if (color == -1 or color == 0):
+        canvas.create_image(10, 50, anchor=NW, image=pion_b)
+        canvas.create_image(50, 50, anchor=NW, image=tour_b)
+        canvas.create_image(90, 50, anchor=NW, image=cavalier_b)
+        canvas.create_image(130, 50, anchor=NW, image=fou_b)
+        canvas.create_image(170, 50, anchor=NW, image=reine_b)
+    promotion.bind('<Button-1>', getPromoted)
+    
 def draw():
     global tableau
     if curPlayer == 1:

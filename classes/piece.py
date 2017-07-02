@@ -1,6 +1,7 @@
 class piece(object):
     _players = {'BLANC' : -1, 'NOIR' : 1}
     _color = 0
+    _moved = False
 
     def __init__(self, color):
         self._color = color
@@ -14,5 +15,11 @@ class piece(object):
     def getColor(self):
         return self._color
 
-    def getImage():
+    def getImage(self):
         raise NotImplementedException()
+
+    def setMoved(self):
+        self._moved=True
+
+    def hasMoved(self):
+        return self._moved
