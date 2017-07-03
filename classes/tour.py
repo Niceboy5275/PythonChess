@@ -1,5 +1,4 @@
 from piece import piece
-from tkinter import *
 
 class tour(piece):
 
@@ -35,9 +34,3 @@ class tour(piece):
 
     def getLetter(self):
         return "T"
-
-    def getImage(self):
-        if self.getColor() == piece._players['NOIR']:
-            return PhotoImage(file="tour_n.png")
-        else:
-            return PhotoImage(file="tour_b.png")
