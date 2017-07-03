@@ -1,5 +1,4 @@
 from piece import piece
-from tkinter import *
 
 class pion(piece):
 
@@ -27,9 +26,3 @@ class pion(piece):
 
     def getLetter(self):
         return "P"
-
-    def getImage(self):
-        if self.getColor() == piece._players['NOIR']:
-            return PhotoImage(file="pion_n.png")
-        else:
-            return PhotoImage(file="pion_b.png")
