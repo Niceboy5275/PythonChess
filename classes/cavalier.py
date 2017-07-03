@@ -1,5 +1,4 @@
 from piece import piece
-from tkinter import *
 
 class cavalier(piece):
 
@@ -16,9 +15,3 @@ class cavalier(piece):
 
     def getLetter(self):
         return "C"
-
-    def getImage(self):
-        if self.getColor() == piece._players['NOIR']:
-            return PhotoImage(file="cavalier_n.png")
-        else:
-            return PhotoImage(file="cavalier_b.png")
