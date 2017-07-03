@@ -1,5 +1,4 @@
 from piece import piece
-from tkinter import *
 
 class roi(piece):
     def move(self, pos_x, pos_y, tableau, array):
