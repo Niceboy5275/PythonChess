@@ -1,5 +1,4 @@
 from piece import piece
-from tkinter import *
 
 class fou(piece):
     def move(self, pos_x, pos_y, tableau, array):
@@ -35,9 +34,3 @@ class fou(piece):
 
     def getLetter(self):
         return "F"
-
-    def getImage(self):
-        if self.getColor() == piece._players['NOIR']:
-            return PhotoImage(file="fou_n.png")
-        else:
-            return PhotoImage(file="fou_b.png")
