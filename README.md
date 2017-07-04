@@ -7,8 +7,8 @@ Current functionalities developed:
 - Possibility to save/ load/ reset a game
 - Roque
 - Promotion
+- Prise en passant
 
 Missing functionalities:
-- Prise en passant
 - IA to play alone
 - Play through network
