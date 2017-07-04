@@ -28,7 +28,6 @@ def openFile():
     global curPlayer
     filename = askopenfilename(filetypes=(("Chess files", "*.chy"),
                                            ("All files", "*.*") ))
-    print ("file : " + filename)
     if filename != "":
         for X in range(0, 8):
             for Y in range(0, 8):
@@ -37,7 +36,6 @@ def openFile():
             content = f.readlines()
             f.close()
         for line in content:
-            print ("data : " + line)
             values = line.split(',')
             color = int(values[3].replace('\n', ''))
             pionLetter = values[2]
