@@ -223,6 +223,12 @@ class tableau():
         else:
             self._selected = False
             if self.isPossible(pos_x, pos_y, possible):
+                if type(self._selectedPion) is pion and pos_x != self._init_x and self.getPion(pos_x, pos_y) == None:
+                    # Prise en passant
+                    if (curPlayer == 1):
+                        self.setPion(pos_x, pos_y - 1, None)
+                    if (curPlayer == -1):
+                        self.setPion(pos_x, pos_y + 1, None)
                 oldPion=self.getPion(pos_x, pos_y)
                 self.setPion(pos_x, pos_y, self._selectedPion)
                 self.setPion(self._init_x, self._init_y, None)
@@ -248,6 +254,22 @@ class tableau():
                         self._init_x = pos_x
                         self._init_y = pos_y
                         return 8
+                    if pos_y == 3 and self._selectedPion.getColor() == 1:
+                        if (pos_y - self._init_y == 2):
+                            neighborPion = self.getPion(pos_x - 1, pos_y)
+                            if type(neighborPion) is pion and neighborPion.getColor() == -1:
+                                neighborPion.setTakeableLeft(True)
+                            neighborPion = self.getPion(pos_x + 1, pos_y)
+                            if type(neighborPion) is pion and neighborPion.getColor() == -1:
+                                neighborPion.setTakeableRight(True)
+                    if pos_y == 4 and self._selectedPion.getColor() == -1:
+                        if (self._init_y - pos_y  == 2):
+                            neighborPion = self.getPion(pos_x - 1, pos_y)
+                            if type(neighborPion) is pion and neighborPion.getColor() == 1:
+                                neighborPion.setTakeableLeft(True)
+                            neighborPion = self.getPion(pos_x + 1, pos_y)
+                            if type(neighborPion) is pion and neighborPion.getColor() == 1:
+                                neighborPion.setTakeableRight(True)
                 echec = self.checkEchec(curPlayer)
                 if (echec == curPlayer):
                     res = 1
@@ -258,8 +280,10 @@ class tableau():
                     if (self.checkMat(curPlayer)):
                         res = 2
                     else :
+                        self.resetTakeable(curPlayer)
                         res = 3
                 else:
+                    self.resetTakeable(curPlayer)
                     self._selectedPion.setMoved()
                     res = 4
             else:
@@ -267,3 +291,11 @@ class tableau():
                 res = 7
             possible.clear()
         return res
+
+    def resetTakeable(self, curPlayer):
+        for X in range(0, 8):
+            for Y in range(0, 8):
+                curPion = self.getPion(X, Y)
+                if type(curPion) is pion and curPion.getColor() == curPlayer:
+                    curPion.setTakeableLeft(False)
+                    curPion.setTakeableRight(False)                    
