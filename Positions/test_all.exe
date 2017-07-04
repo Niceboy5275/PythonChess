@@ -1,3 +1,4 @@
+export PATH=/c/Users/Vincent/AppData/Local/Programs/Python/Python36:$PATH
 for file in `ls -1 solution*.txt`
 do
     python ../classes/chess_simple.py < $file > output_$file
@@ -7,14 +8,14 @@ do
         echo 'Error with file '$file
     fi
     output_ref=`echo "output_$file" | sed 's/txt/ref/g'`
-    dos2unix output_$file
     dos2unix $output_ref
+    dos2unix output_$file
     nbLines=`diff  output_$file $output_ref | wc -l`
     if [ $nbLines -ne 0 ]
     then
         diff  output_$file $output_ref
         echo 'Error with file '$file
-    else
-        rm output_$file
+    # else
+        # rm output_$file
     fi
 done
