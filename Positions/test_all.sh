@@ -7,6 +7,8 @@ do
         echo 'Error with file '$file
     fi
     output_ref=`echo "output_$file" | sed 's/txt/ref/g'`
+    dos2unix output_$file
+    dos2unix $output_ref
     nbLines=`diff  output_$file $output_ref | wc -l`
     if [ $nbLines -ne 0 ]
     then
