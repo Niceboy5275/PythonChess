@@ -308,4 +308,30 @@ class tableau():
                 curPion = self.getPion(X, Y)
                 if type(curPion) is pion and curPion.getColor() == curPlayer:
                     curPion.setTakeableLeft(False)
-                    curPion.setTakeableRight(False)                    
+                    curPion.setTakeableRight(False)
+
+    def loadFile(self, filename):
+        for X in range(0, 8):
+            for Y in range(0, 8):
+                self.setPion(X, Y, None)
+        with open(filename) as f:
+            content = f.readlines()
+            f.close()
+        for line in content:
+            values = line.split(',')
+            color = int(values[3].replace('\n', ''))
+            pionLetter = values[2]
+            if pionLetter == "T":
+                pionV = tour(color)
+            elif pionLetter == "C":
+                pionV = cavalier(color)
+            elif pionLetter == "F":
+                pionV = fou(color)
+            elif pionLetter == "K":
+                pionV = roi(color)
+            elif pionLetter == "Q":
+                pionV = reine(color)
+            elif pionLetter == "P":
+                pionV = pion(color)
+            self.setPion(int(values[0]), int(values[1]), pionV)
+        

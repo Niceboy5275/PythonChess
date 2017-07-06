@@ -29,29 +29,7 @@ def openFile():
     filename = askopenfilename(filetypes=(("Chess files", "*.chy"),
                                            ("All files", "*.*") ))
     if filename != "":
-        for X in range(0, 8):
-            for Y in range(0, 8):
-                tableau.setPion(X, Y, None)
-        with open(filename) as f:
-            content = f.readlines()
-            f.close()
-        for line in content:
-            values = line.split(',')
-            color = int(values[3].replace('\n', ''))
-            pionLetter = values[2]
-            if pionLetter == "T":
-                pionV = tour.tour(color)
-            elif pionLetter == "C":
-                pionV = cavalier.cavalier(color)
-            elif pionLetter == "F":
-                pionV = fou.fou(color)
-            elif pionLetter == "K":
-                pionV = roi.roi(color)
-            elif pionLetter == "Q":
-                pionV = reine.reine(color)
-            elif pionLetter == "P":
-                pionV = pion.pion(color)
-            tableau.setPion(int(values[0]), int(values[1]), pionV)
+        tableau.loadFile(filename)
         curPlayer = -1
         draw()
 
