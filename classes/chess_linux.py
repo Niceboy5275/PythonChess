@@ -26,7 +26,7 @@ def showEchec():
 def showEchecEtMat():
     print ("Echec et mat !")
 
-def showPromotion():
+def showPromotion(curPlayer):
     print ("Enter the type of piece you want (P, T, C, F, Q) :")
     piece = input("Piece : ")
     if piece == "P":
