@@ -15,43 +15,20 @@ possible = set()
 def openFile(filename):
     global curPlayer
     if filename != "":
-        for X in range(0, 8):
-            for Y in range(0, 8):
-                tableau.setPion(X, Y, None)
-        with open(filename) as f:
-            content = f.readlines()
-            f.close()
-        for line in content:
-            print ("data : " + line)
-            values = line.split(',')
-            color = int(values[3].replace('\n', ''))
-            pionLetter = values[2]
-            if pionLetter == "T":
-                pionV = tour.tour(color)
-            elif pionLetter == "C":
-                pionV = cavalier.cavalier(color)
-            elif pionLetter == "F":
-                pionV = fou.fou(color)
-            elif pionLetter == "K":
-                pionV = roi.roi(color)
-            elif pionLetter == "Q":
-                pionV = reine.reine(color)
-            elif pionLetter == "P":
-                pionV = pion.pion(color)
-            tableau.setPion(int(values[0]), int(values[1]), pionV)
+        tableau.loadFile(filename)
         curPlayer = -1
         draw()
 
 
 def showEchec():
-    print "Echec !"
+    print ("Echec !")
 
 def showEchecEtMat():
-    print "Echec et mat !"
+    print ("Echec et mat !")
 
 def showPromotion():
-    print "Enter the type of piece you want (P, T, C, F, Q) :"
-    piece = raw_input("Piece : ")
+    print ("Enter the type of piece you want (P, T, C, F, Q) :")
+    piece = input("Piece : ")
     if piece == "P":
         res = tableau.setPromoted(pion.pion(curPlayer), curPlayer)
     elif piece == "T":
@@ -80,8 +57,8 @@ def showPromotion():
 
     
 def draw():
-    print "    0    1    2    3    4    5    6    7"
-    print "                                        "
+    print ("    0    1    2    3    4    5    6    7")
+    print ("                                        ")
     for Y in range(0,8):
         for Z in range(0,3):
             strValue = ""
@@ -119,7 +96,7 @@ def draw():
                         bkg_pion = bkg
                         pionString = pionClass.getLetter()
                     strValue = strValue + '\033[1;38;' + str(bkg) + 'm \033[0m\033[' + color + ';' + str(bkg_pion) + 'm ' + pionString + ' \033[0m\033[1;38;' + str(bkg) + 'm \033[0m'
-            print strValue
+            print (strValue)
 curPlayer = piece._players['BLANC']
 selected = False
 selectedPion = 0
@@ -130,10 +107,10 @@ draw()
 LOOP_ACTIVE = True
 while LOOP_ACTIVE:
     if (curPlayer == piece._players['NOIR']) :
-        print "Joueur noir"
+        print ("Joueur noir")
     else:
-        print "Joueur blanc"
-    action = raw_input("Action : ")
+        print ("Joueur blanc")
+    action = input("Action : ")
     try:
         if (action == "quit"):
             LOOP_ACTIVE = False
@@ -158,5 +135,5 @@ while LOOP_ACTIVE:
             draw()
 
     except:
-        print "Commande non comprise"
+        print ("Commande non comprise")
         traceback.print_exc(file=sys.stdout)
