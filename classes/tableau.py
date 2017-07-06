@@ -246,14 +246,6 @@ class tableau():
                             self.setPion(5, self._init_y, tour)
                             self.setPion(7, self._init_y, None)
                 if type(self._selectedPion) is pion:
-                    if pos_y == 7 and self._selectedPion.getColor() == 1:
-                        self._init_x = pos_x
-                        self._init_y = pos_y
-                        return 8
-                    if pos_y == 0 and self._selectedPion.getColor() == -1:
-                        self._init_x = pos_x
-                        self._init_y = pos_y
-                        return 8
                     if pos_y == 3 and self._selectedPion.getColor() == 1:
                         if (pos_y - self._init_y == 2):
                             neighborPion = self.getPion(pos_x - 1, pos_y)
@@ -282,10 +274,28 @@ class tableau():
                     else :
                         self.resetTakeable(curPlayer)
                         res = 3
+                        if type(self._selectedPion) is pion:
+                            if pos_y == 7 and self._selectedPion.getColor() == 1:
+                                self._init_x = pos_x
+                                self._init_y = pos_y
+                                res = 8
+                            if pos_y == 0 and self._selectedPion.getColor() == -1:
+                                self._init_x = pos_x
+                                self._init_y = pos_y
+                                res = 8
                 else:
                     self.resetTakeable(curPlayer)
                     self._selectedPion.setMoved()
                     res = 4
+                    if type(self._selectedPion) is pion:
+                        if pos_y == 7 and self._selectedPion.getColor() == 1:
+                            self._init_x = pos_x
+                            self._init_y = pos_y
+                            res = 8
+                        if pos_y == 0 and self._selectedPion.getColor() == -1:
+                            self._init_x = pos_x
+                            self._init_y = pos_y
+                            res = 8
             else:
                 print("Mouvement impossible")
                 res = 7
