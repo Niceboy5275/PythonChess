@@ -112,8 +112,30 @@ while LOOP_ACTIVE:
             print("Filename : " + values[1])
             openFile(values[1])
         else:
-            values = action.split(" ")
-            res = tableau.play(int(values[0]), int(values[1]), curPlayer, possible)
+            input_x = -1
+            if (action[0] == "A" or action[0] == "a"):
+                input_x = 0
+            if (action[0] == "B" or action[0] == "b"):
+                input_x = 1
+            if (action[0] == "C" or action[0] == "c"):
+                input_x = 2
+            if (action[0] == "D" or action[0] == "d"):
+                input_x = 3
+            if (action[0] == "E" or action[0] == "e"):
+                input_x = 4
+            if (action[0] == "F" or action[0] == "f"):
+                input_x = 5
+            if (action[0] == "G" or action[0] == "g"):
+                input_x = 6
+            if (action[0] == "H" or action[0] == "h"):
+                input_x = 7
+            if input_x == -1:
+                values = action.split(" ")
+                input_x = int(values[0])
+                input_y =int(values[1])
+            else:
+                input_y = 8-int(action[1])
+            res = tableau.play(input_x, input_y, curPlayer, possible)
             if res == 1:
                 showEchec()
             elif res == 2:
