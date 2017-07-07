@@ -55,13 +55,17 @@ class roi(piece):
         if rightRoque or leftRoque:
             opponent = set()
             tableau.computePossible(-1 * self.getColor(), opponent)
+            if ((4, ligne) in opponent):
+                print ("Roque : (4, 0) opponent")
+                leftRoque = False            
+                rightRoque = False
             if leftRoque:
                 # Check if king is in mat position
                 if ((3, ligne) in opponent):
                     print ("Roque : (3, 0) opponent")
                     leftRoque = False
                 if ((2, ligne) in opponent):
-                    print ("Roque : (3, 0) opponent")
+                    print ("Roque : (2, 0) opponent")
                     leftRoque = False
             if rightRoque:
                 # Check if king is in mat position
