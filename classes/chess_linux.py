@@ -57,8 +57,6 @@ def showPromotion(curPlayer):
 
     
 def draw():
-    print ("    0    1    2    3    4    5    6    7")
-    print ("                                        ")
     for Y in range(0,8):
         for Z in range(0,3):
             strValue = ""
@@ -97,6 +95,9 @@ def draw():
                         pionString = pionClass.getLetter()
                     strValue = strValue + '\033[1;38;' + str(bkg) + 'm \033[0m\033[' + color + ';' + str(bkg_pion) + 'm ' + pionString + ' \033[0m\033[1;38;' + str(bkg) + 'm \033[0m'
             print (strValue)
+    print "    A    B    C    D    E    F    G    H"
+    print ""
+
 curPlayer = piece._players['BLANC']
 selected = False
 selectedPion = 0
