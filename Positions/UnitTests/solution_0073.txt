@@ -1,0 +1,4 @@
+load Chess_0073_v2.chy
+7 1
+1 1
+quit

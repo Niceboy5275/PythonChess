@@ -1,0 +1,4 @@
+load Chess_0084_v2.chy
+0 7
+0 0
+quit
