@@ -1,0 +1,4 @@
+load Chess_0031_v2.chy
+2 5
+6 1
+quit

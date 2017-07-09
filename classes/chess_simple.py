@@ -88,8 +88,8 @@ def draw():
                         pionString = pionClass.getLetter()
                     strValue = strValue + bkg + pionString + bkg
             print (strValue)
-    print "    A   B   C   D   E   F   G   H"
-    print ""
+    print("    A   B   C   D   E   F   G   H")
+    print("")
 
 curPlayer = piece._players['BLANC']
 selected = False
