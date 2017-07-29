@@ -250,6 +250,7 @@ class tableau():
                         self._interface.showEchecEtMat()
                     else :
                         self._interface.showEchec()
+                    self.changePlayer()
                 else:
                     self._selectedPion.setMoved()
                     self.changePlayer()
@@ -298,6 +299,16 @@ class tableau():
             self.setCurPlayer(-1)
             self._interface.draw(self)
 
+    def saveFile(self, filename):
+        if filename != "":
+            file = open(filename, 'w')
+            for Y in range(0, 8):
+                for X in range(0, 8):
+                    pion = tableau.getPion(X, Y)
+                    if (pion != None):
+                        file.write(str(X)+","+str(Y)+","+pion.getLetter()+"," + pion.getColor() + "\n")
+            file.close()
+        
     def start(self):
         self._interface.draw(self)
         while True:

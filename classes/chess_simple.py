@@ -86,6 +86,10 @@ class chess_simple(chessInterface):
                 values = action.split(" ")
                 tableau.openFile(values[1])
                 tableau.insertMove(-2, -2, -1)
+            elif (action.find("save") != -1):
+                values = action.split(" ")
+                tableau.saveFile(values[1])
+                tableau.insertMove(-2, -2, -1)
             else:
                 input_x = -1
                 if (action[0] == "A" or action[0] == "a"):

@@ -15,35 +15,33 @@ class chess_linux(chessInterface):
         pass
 
     def showEchec(self):
-        print "Echec !"
+        print ("Echec !")
     
     def showEchecEtMat(self):
-        print "Echec et mat !"
+        print ("Echec et mat !")
     
     def showPromotion(self, tableau):
-        curPlayer = tableau.getCurPlayer()
-        print "Enter the type of piece you want (P, T, C, F, Q) :"
-        piece = raw_input("Piece : ")
+        curPlayer=tableau.getCurPlayer()
+        print ("Enter the type of piece you want (P, T, C, F, Q) :")
+        piece = input("Piece : ")
         while (True):
             if piece == "P":
-                tableau.setPromoted(pion.pion(curPlayer), curPlayer)
+                tableau.setPromoted(pion.pion(curPlayer))
                 break
             elif piece == "T":
-                tableau.setPromoted(tour.tour(curPlayer), curPlayer)
+                tableau.setPromoted(tour.tour(curPlayer))
                 break
             elif piece == "C":
-                tableau.setPromoted(cavalier.cavalier(curPlayer), curPlayer)
+                tableau.setPromoted(cavalier.cavalier(curPlayer))
                 break
             elif piece == "F":
-                tableau.setPromoted(fou.fou(curPlayer), curPlayer)
+                tableau.setPromoted(fou.fou(curPlayer))
                 break
             elif piece == "Q":
-                tableau.setPromoted(reine.reine(curPlayer), curPlayer)
+                tableau.setPromoted(reine.reine(curPlayer))
                 break
             else:
-                piece = raw_input("Piece : ")
-        draw()
-    
+                piece = input("Piece : ")
         
     def draw(self, tableau):
         for Y in range(0,8):
@@ -83,22 +81,26 @@ class chess_linux(chessInterface):
                             bkg_pion = bkg
                             pionString = pionClass.getLetter()
                         strValue = strValue + '\033[1;38;' + str(bkg) + 'm \033[0m\033[' + color + ';' + str(bkg_pion) + 'm ' + pionString + ' \033[0m\033[1;38;' + str(bkg) + 'm \033[0m'
-                print strValue
-        print "    A    B    C    D    E    F    G    H"
-        print ""
+                print (strValue)
+        print ("    A    B    C    D    E    F    G    H")
+        print ("")
 
     def mainLoop(self, tableau):
         if (tableau.getCurPlayer() == piece._players['NOIR']) :
-            print "Joueur noir"
+            print ("Joueur noir")
         else:
-            print "Joueur blanc"
-        action = raw_input("Action : ")
+            print ("Joueur blanc")
+        action = input("Action : ")
         try:
             if (action == "quit"):
                 tableau.insertMove(-1, -1, -1)
             elif (action.find("load") != -1):
                 values = action.split(" ")
                 tableau.openFile(values[1])
+                tableau.insertMove(-2, -2, -1)
+            elif (action.find("save") != -1):
+                values = action.split(" ")
+                tableau.saveFile(values[1])
                 tableau.insertMove(-2, -2, -1)
             else:
                 input_x = -1
@@ -126,5 +128,5 @@ class chess_linux(chessInterface):
                     input_y = 8-int(action[1])
                 tableau.insertMove(input_x, input_y, tableau.getCurPlayer())
         except:
-            print "Commande non comprise"
+            print ("Commande non comprise")
             traceback.print_exc(file=sys.stdout)
