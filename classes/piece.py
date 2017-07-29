@@ -15,6 +15,9 @@ class piece(object):
     def getColor(self):
         return self._color
 
+    def getImage(self):
+        raise NotImplementedException()
+
     def setMoved(self):
         self._moved=True
 

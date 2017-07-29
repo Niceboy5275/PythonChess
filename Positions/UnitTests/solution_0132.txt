@@ -1,0 +1,4 @@
+load Chess_0132_v2.chy
+0 7
+0 1
+quit

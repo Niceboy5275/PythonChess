@@ -1,0 +1,4 @@
+load Chess_0085_v2.chy
+2 7
+7 2
+quit

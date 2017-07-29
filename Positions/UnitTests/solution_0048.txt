@@ -1,0 +1,5 @@
+load Chess_0048_v2.chy
+5 1
+5 0
+Q
+quit

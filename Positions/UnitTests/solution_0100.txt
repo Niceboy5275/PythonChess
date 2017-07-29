@@ -1,0 +1,4 @@
+load Chess_0100_v2.chy
+0 6
+4 6
+quit

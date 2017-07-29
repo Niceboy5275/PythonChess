@@ -1,0 +1,4 @@
+load Chess_0045_v2.chy
+7 6
+3 2
+quit

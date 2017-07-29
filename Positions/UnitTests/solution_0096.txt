@@ -1,0 +1,4 @@
+load Chess_0096_v2.chy
+0 3
+6 3
+quit

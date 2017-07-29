@@ -1,0 +1,5 @@
+load Chess_0055_v2.chy
+3 2
+3 1
+quit
+

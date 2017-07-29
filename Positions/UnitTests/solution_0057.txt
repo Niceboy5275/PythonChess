@@ -1,0 +1,5 @@
+load Chess_0057_v2.chy
+1 7
+4 4
+quit
+
