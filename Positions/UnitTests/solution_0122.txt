@@ -1,0 +1,4 @@
+load Chess_0122_v2.chy
+7 5
+4 2
+quit

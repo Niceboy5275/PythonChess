@@ -5,36 +5,29 @@ from tour import tour
 from cavalier import cavalier
 from roi import roi
 from reine import reine
+import chess_interface
+import queue
 
 class tableau():
     _tableau = [ [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None] ]
     _selected = False
     _init_x = -1
     _init_y = -1
+    _curPlayer = -1
     _selectedPion = None
-
-    def __init__(self):
+    _interface = None
+    _queue = None
+    _possible = set()
+    
+    def __init__(self, interface):
         self.reset()
+        self._interface = interface
+        self._queue = queue.Queue()
 
-    def setPromoted(self, pion, curPlayer):
-        if curPlayer != pion.getColor():
+    def setPromoted(self, pion):
+        if self._curPlayer != pion.getColor():
             return 0
         self.setPion(self._init_x, self._init_y, pion)       
-        echec = self.checkEchec(curPlayer)
-        if (echec == curPlayer):
-            res = 1
-            self.setPion(pos_x, pos_y, oldPion)
-            self.setPion(self._init_x, self._init_y, self._selectedPion)
-        elif (echec == (-1 * curPlayer)):
-            self._selectedPion.setMoved()
-            if (self.checkMat(curPlayer)):
-                res = 2
-            else :
-                res = 3
-        else:
-            self._selectedPion.setMoved()
-            res = 4
-        return res
         
     def reset(self):
         for X in range(0, 8):
@@ -83,7 +76,7 @@ class tableau():
                 if pion != None and pion.getColor() == color:
                     pion.move(X, Y, self, array)
 
-    def isPossible(self, pos_x, pos_y, array):
+    def isPossible(self, pos_x, pos_y, array = _possible):
         return (pos_x, pos_y) in array
 
     def setPossible(self, pos_x, pos_y, color, array):
@@ -106,11 +99,11 @@ class tableau():
             return None
         return self._tableau[X][Y]
 
-    def checkMat(self, curPlayer):
+    def checkMat(self):
         for X in range(0, 8):
             for Y in range(0, 8):
                 pion = self.getPion(X, Y)
-                if type(pion) == roi and ((pion.getColor() == piece._players['NOIR'] and curPlayer == -1) or (pion.getColor() == piece._players['BLANC'] and curPlayer == 1)):
+                if type(pion) == roi and ((pion.getColor() == piece._players['NOIR'] and self._curPlayer == -1) or (pion.getColor() == piece._players['BLANC'] and self._curPlayer == 1)):
                     roi_X = X
                     roi_Y = Y
                     posPion = set()
@@ -127,10 +120,10 @@ class tableau():
                         self.setPion(X, Y, pion)
                         self.setPion(posRoiX, posRoiY, oldValue)
 
-                        if curPlayer == 1 and not self.isPossible(posRoiX, posRoiY, possibleNoir):
+                        if self._curPlayer == 1 and not self.isPossible(posRoiX, posRoiY, possibleNoir):
                             print ("CheckMat - 1")
                             return False
-                        if curPlayer == -1 and not self.isPossible(posRoiX, posRoiY, possibleBlanc):
+                        if self._curPlayer == -1 and not self.isPossible(posRoiX, posRoiY, possibleBlanc):
                             print ("CheckMat - 2")
                             return False
                     
@@ -139,7 +132,7 @@ class tableau():
             for Y in range(0, 8):
                 pion = self.getPion(X, Y)
                 if pion != None:
-                    if (pion.getColor() * curPlayer) < 0:
+                    if (pion.getColor() * self._curPlayer) < 0:
                         posPion = set()
                         pion.move(X, Y, self, posPion)
                         for (posPion_X, posPion_Y) in posPion:
@@ -154,12 +147,12 @@ class tableau():
                             self.setPion(X, Y, pion)
                             self.setPion(posPion_X, posPion_Y, oldValue)
                             if (type(pion) == roi):
-                                if curPlayer == 1 and not self.isPossible(posPion_X, posPion_Y, possibleNoir):
+                                if self._curPlayer == 1 and not self.isPossible(posPion_X, posPion_Y, possibleNoir):
                                     print ("CurPos : " + str(X) + "/" + str(Y))
                                     print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
                                     print ("CheckMat - 3")
                                     return False
-                                if curPlayer == -1 and not self.isPossible(posPion_X, posPion_Y, possibleBlanc):
+                                if self._curPlayer == -1 and not self.isPossible(posPion_X, posPion_Y, possibleBlanc):
                                     print ("CurPos : " + str(X) + "/" + str(Y))
                                     print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
                                     for (pX, pY) in possibleBlanc:
@@ -167,12 +160,12 @@ class tableau():
                                     print ("CheckMat - 4")
                                     return False
                             else:
-                                if curPlayer == 1 and not self.isPossible(roi_X, roi_Y, possibleNoir):
+                                if self._curPlayer == 1 and not self.isPossible(roi_X, roi_Y, possibleNoir):
                                     print ("CurPos : " + str(X) + "/" + str(Y))
                                     print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
                                     print ("CheckMat - 3")
                                     return False
-                                if curPlayer == -1 and not self.isPossible(roi_X, roi_Y, possibleBlanc):
+                                if self._curPlayer == -1 and not self.isPossible(roi_X, roi_Y, possibleBlanc):
                                     print ("CurPos : " + str(X) + "/" + str(Y))
                                     print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
                                     for (pX, pY) in possibleBlanc:
@@ -181,7 +174,7 @@ class tableau():
                                     return False
         return True
         
-    def checkEchec(self, curPlayer):
+    def checkEchec(self):
         possibleBlanc = set()
         possibleNoir = set()
         self.computePossible(piece._players['NOIR'], possibleNoir)
@@ -197,7 +190,7 @@ class tableau():
                     if (pion.getColor() == piece._players['BLANC'] and self.isPossible(X, Y, possibleNoir) == 1):
                         blancEchec=True
         if (noirEchec and blancEchec):
-            return curPlayer
+            return self._curPlayer
         elif (noirEchec):
             return piece._players['NOIR']
         elif (blancEchec):
@@ -205,30 +198,23 @@ class tableau():
         else:              
             return 0
 
-    def play(self, pos_x, pos_y, curPlayer, possible):
+    def play(self, pos_x, pos_y):
         if self._selected == False:
+            self._possible.clear()
             pionV = self.getPion(pos_x, pos_y)
-            if (pionV != None and pionV.getColor() * curPlayer) > 0:
+            if (pionV != None and pionV.getColor() * self._curPlayer) > 0:
                 self._selected = True
                 self._selectedPion = pionV
                 self._init_x = pos_x
                 self._init_y = pos_y
-                pionV.move(pos_x, pos_y, self, possible)
+                pionV.move(pos_x, pos_y, self, self._possible)
                 if type(pionV) is roi:
-                    pionV.checkRoque(self, possible)
-                res = 5
+                    pionV.checkRoque(self, self._possible)
             else:
                 print ("Case non valide")
-                res = 6
         else:
             self._selected = False
-            if self.isPossible(pos_x, pos_y, possible):
-                if type(self._selectedPion) is pion and pos_x != self._init_x and self.getPion(pos_x, pos_y) == None:
-                    # Prise en passant
-                    if (curPlayer == 1):
-                        self.setPion(pos_x, pos_y - 1, None)
-                    if (curPlayer == -1):
-                        self.setPion(pos_x, pos_y + 1, None)
+            if self.isPossible(pos_x, pos_y, self._possible):
                 oldPion=self.getPion(pos_x, pos_y)
                 self.setPion(pos_x, pos_y, self._selectedPion)
                 self.setPion(self._init_x, self._init_y, None)
@@ -246,92 +232,82 @@ class tableau():
                             self.setPion(5, self._init_y, tour)
                             self.setPion(7, self._init_y, None)
                 if type(self._selectedPion) is pion:
-                    if pos_y == 3 and self._selectedPion.getColor() == 1:
-                        if (pos_y - self._init_y == 2):
-                            neighborPion = self.getPion(pos_x - 1, pos_y)
-                            if type(neighborPion) is pion and neighborPion.getColor() == -1:
-                                neighborPion.setTakeableLeft(True)
-                            neighborPion = self.getPion(pos_x + 1, pos_y)
-                            if type(neighborPion) is pion and neighborPion.getColor() == -1:
-                                neighborPion.setTakeableRight(True)
-                    if pos_y == 4 and self._selectedPion.getColor() == -1:
-                        if (self._init_y - pos_y  == 2):
-                            neighborPion = self.getPion(pos_x - 1, pos_y)
-                            if type(neighborPion) is pion and neighborPion.getColor() == 1:
-                                neighborPion.setTakeableLeft(True)
-                            neighborPion = self.getPion(pos_x + 1, pos_y)
-                            if type(neighborPion) is pion and neighborPion.getColor() == 1:
-                                neighborPion.setTakeableRight(True)
-                echec = self.checkEchec(curPlayer)
-                if (echec == curPlayer):
-                    res = 1
+                    if pos_y == 7 and self._selectedPion.getColor() == 1:
+                        self._init_x = pos_x
+                        self._init_y = pos_y
+                        self._interface.showPromotion(self)
+                    if pos_y == 0 and self._selectedPion.getColor() == -1:
+                        self._init_x = pos_x
+                        self._init_y = pos_y
+                        self._interface.showPromotion(self)
+                echec = self.checkEchec()
+                if (echec == self._curPlayer):
                     self.setPion(pos_x, pos_y, oldPion)
                     self.setPion(self._init_x, self._init_y, self._selectedPion)
-                elif (echec == (-1 * curPlayer)):
+                elif (echec == (-1 * self._curPlayer)):
                     self._selectedPion.setMoved()
-                    if (self.checkMat(curPlayer)):
-                        res = 2
+                    if (self.checkMat()):
+                        self._interface.showEchecEtMat()
                     else :
-                        self.resetTakeable(curPlayer)
-                        res = 3
-                        if type(self._selectedPion) is pion:
-                            if pos_y == 7 and self._selectedPion.getColor() == 1:
-                                self._init_x = pos_x
-                                self._init_y = pos_y
-                                res = 8
-                            if pos_y == 0 and self._selectedPion.getColor() == -1:
-                                self._init_x = pos_x
-                                self._init_y = pos_y
-                                res = 8
+                        self._interface.showEchec()
                 else:
-                    self.resetTakeable(curPlayer)
                     self._selectedPion.setMoved()
-                    res = 4
-                    if type(self._selectedPion) is pion:
-                        if pos_y == 7 and self._selectedPion.getColor() == 1:
-                            self._init_x = pos_x
-                            self._init_y = pos_y
-                            res = 8
-                        if pos_y == 0 and self._selectedPion.getColor() == -1:
-                            self._init_x = pos_x
-                            self._init_y = pos_y
-                            res = 8
+                    self.changePlayer()
             else:
                 print("Mouvement impossible")
-                res = 7
-            possible.clear()
-        return res
+            self._possible.clear()
 
-    def resetTakeable(self, curPlayer):
-        for X in range(0, 8):
-            for Y in range(0, 8):
-                curPion = self.getPion(X, Y)
-                if type(curPion) is pion and curPion.getColor() == curPlayer:
-                    curPion.setTakeableLeft(False)
-                    curPion.setTakeableRight(False)
+    def setCurPlayer(self, curPlayer):
+        self._curPlayer = curPlayer
 
-    def loadFile(self, filename):
-        for X in range(0, 8):
-            for Y in range(0, 8):
-                self.setPion(X, Y, None)
-        with open(filename) as f:
-            content = f.readlines()
-            f.close()
-        for line in content:
-            values = line.split(',')
-            color = int(values[3].replace('\n', ''))
-            pionLetter = values[2]
-            if pionLetter == "T":
-                pionV = tour(color)
-            elif pionLetter == "C":
-                pionV = cavalier(color)
-            elif pionLetter == "F":
-                pionV = fou(color)
-            elif pionLetter == "K":
-                pionV = roi(color)
-            elif pionLetter == "Q":
-                pionV = reine(color)
-            elif pionLetter == "P":
-                pionV = pion(color)
-            self.setPion(int(values[0]), int(values[1]), pionV)
-        
+    def getCurPlayer(self):
+        return self._curPlayer
+
+    def changePlayer(self):
+        self._curPlayer = (-1) * self._curPlayer
+
+    def insertMove(self, pos_x, pos_y, curPlayer):
+        print("Inserting data")
+        self._queue.put((pos_x, pos_y, curPlayer))
+
+    def openFile(self, filename):
+        if filename != "":
+            for X in range(0, 8):
+                for Y in range(0, 8):
+                    self.setPion(X, Y, None)
+            with open(filename) as f:
+                content = f.readlines()
+                f.close()
+            for line in content:
+                values = line.split(',')
+                color = int(values[3].replace('\n', ''))
+                pionLetter = values[2]
+                if pionLetter == "T":
+                    pionV = tour(color)
+                elif pionLetter == "C":
+                    pionV = cavalier(color)
+                elif pionLetter == "F":
+                    pionV = fou(color)
+                elif pionLetter == "K":
+                    pionV = roi(color)
+                elif pionLetter == "Q":
+                    pionV = reine(color)
+                elif pionLetter == "P":
+                    pionV = pion(color)
+                self.setPion(int(values[0]), int(values[1]), pionV)
+            self.setCurPlayer(-1)
+            self._interface.draw(self)
+
+    def start(self):
+        self._interface.draw(self)
+        while True:
+            print ("Main loop")
+            self._interface.mainLoop(self)
+            item = self._queue.get(True, None)
+            if (item[0] == -1 and item[1] == -1):
+                break
+            elif (item[0] == -2 and item[1] == -2):
+                pass
+            else:
+                self.play(item[0], item[1])
+                self._interface.draw(self)

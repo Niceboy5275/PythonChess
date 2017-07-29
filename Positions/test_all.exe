@@ -2,7 +2,7 @@ export PATH=/c/Users/Vincent/AppData/Local/Programs/Python/Python36:$PATH
 for file in `ls -1 solution*.txt`
 do
     echo -n '.'
-    python ../classes/chess_simple.py < $file > output_$file
+    python ../classes/chess_main.py < $file > output_$file
     nbLines=`cat output_$file | grep "Echec et mat !" | wc -l`
     if [ $nbLines -ne 1 ]
     then
