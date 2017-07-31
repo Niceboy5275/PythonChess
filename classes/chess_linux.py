@@ -15,35 +15,44 @@ class chess_linux(chessInterface):
         pass
 
     def showEchec(self):
-        print ("Echec !")
+        print("Echec !")
     
     def showEchecEtMat(self):
-        print ("Echec et mat !")
+        print("Echec et mat !")
     
     def showPromotion(self, tableau):
-        curPlayer=tableau.getCurPlayer()
-        print ("Enter the type of piece you want (P, T, C, F, Q) :")
-        piece = input("Piece : ")
-        while (True):
-            if piece == "P":
-                tableau.setPromoted(pion.pion(curPlayer))
-                break
-            elif piece == "T":
-                tableau.setPromoted(tour.tour(curPlayer))
-                break
-            elif piece == "C":
-                tableau.setPromoted(cavalier.cavalier(curPlayer))
-                break
-            elif piece == "F":
-                tableau.setPromoted(fou.fou(curPlayer))
-                break
-            elif piece == "Q":
-                tableau.setPromoted(reine.reine(curPlayer))
-                break
-            else:
-                piece = input("Piece : ")
+        try:
+            curPlayer = tableau.getCurPlayer()
+            print("Enter the type of piece you want (P, T, C, F, Q) :")
+            piece = input("Piece : ")
+            while (True):
+                if piece == "P":
+                    tableau.setPromoted(pion.pion(curPlayer), curPlayer)
+                    break
+                elif piece == "T":
+                    tableau.setPromoted(tour.tour(curPlayer), curPlayer)
+                    break
+                elif piece == "C":
+                    tableau.setPromoted(cavalier.cavalier(curPlayer), curPlayer)
+                    break
+                elif piece == "F":
+                    tableau.setPromoted(fou.fou(curPlayer), curPlayer)
+                    break
+                elif piece == "Q":
+                    tableau.setPromoted(reine.reine(curPlayer), curPlayer)
+                    break
+                else:
+                    piece = input("Piece : ")
+            draw()
+        except KeyboardInterrupt:
+            tableau.insertMove(-1, -1, -1)
+    
         
     def draw(self, tableau):
+        if (tableau.getCurPlayer() == piece._players['NOIR']) :
+            print("Joueur noir")
+        else:
+            print("Joueur blanc")
         for Y in range(0,8):
             for Z in range(0,3):
                 strValue = ""
@@ -81,52 +90,64 @@ class chess_linux(chessInterface):
                             bkg_pion = bkg
                             pionString = pionClass.getLetter()
                         strValue = strValue + '\033[1;38;' + str(bkg) + 'm \033[0m\033[' + color + ';' + str(bkg_pion) + 'm ' + pionString + ' \033[0m\033[1;38;' + str(bkg) + 'm \033[0m'
-                print (strValue)
-        print ("    A    B    C    D    E    F    G    H")
-        print ("")
+                print(strValue)
+        print("    A    B    C    D    E    F    G    H")
+        print("")
 
     def mainLoop(self, tableau):
-        if (tableau.getCurPlayer() == piece._players['NOIR']) :
-            print ("Joueur noir")
-        else:
-            print ("Joueur blanc")
-        action = input("Action : ")
-        try:
-            if (action == "quit"):
+        if tableau.askForAction() :
+            try:
+                action = input("Action : ")
+            except KeyboardInterrupt:
                 tableau.insertMove(-1, -1, -1)
-            elif (action.find("load") != -1):
-                values = action.split(" ")
-                tableau.openFile(values[1])
-                tableau.insertMove(-2, -2, -1)
-            elif (action.find("save") != -1):
-                values = action.split(" ")
-                tableau.saveFile(values[1])
-                tableau.insertMove(-2, -2, -1)
-            else:
-                input_x = -1
-                if (action[0] == "A" or action[0] == "a"):
-                    input_x = 0
-                if (action[0] == "B" or action[0] == "b"):
-                    input_x = 1
-                if (action[0] == "C" or action[0] == "c"):
-                    input_x = 2
-                if (action[0] == "D" or action[0] == "d"):
-                    input_x = 3
-                if (action[0] == "E" or action[0] == "e"):
-                    input_x = 4
-                if (action[0] == "F" or action[0] == "f"):
-                    input_x = 5
-                if (action[0] == "G" or action[0] == "g"):
-                    input_x = 6
-                if (action[0] == "H" or action[0] == "h"):
-                    input_x = 7
-                if input_x == -1:
+                return
+            try:
+                if (action == "quit"):
+                    tableau.insertMove(-1, -1, -1)
+                elif (action.find("load") != -1):
                     values = action.split(" ")
-                    input_x = int(values[0])
-                    input_y =int(values[1])
+                    tableau.openFile(values[1])
+                    tableau.insertMove(-2, -2, -1)
+                elif (action.find("start server ") != -1):
+                    values = action.split(" ")
+                    tableau.startServer(int(values[2]))
+                    tableau.insertMove(-2, -2, -1)
+                elif (action.find("start client ") != -1):
+                    values = action.split(" ")
+                    tableau.startClient(values[2], int(values[3]))
+                    tableau.insertMove(-2, -2, -1)
+                elif (action.find("stop server") != -1):
+                    tableau.stopServer()
+                    tableau.insertMove(-2, -2, -1)
+                elif (action.find("stop client") != -1):
+                    tableau.stopClient()
+                    tableau.insertMove(-2, -2, -1)
                 else:
-                    input_y = 8-int(action[1])
-                tableau.insertMove(input_x, input_y, tableau.getCurPlayer())
-        except:
-            print ("Commande non comprise")
-            traceback.print_exc(file=sys.stdout)
+                    input_x = -1
+                    if (action[0] == "A" or action[0] == "a"):
+                        input_x = 0
+                    if (action[0] == "B" or action[0] == "b"):
+                        input_x = 1
+                    if (action[0] == "C" or action[0] == "c"):
+                        input_x = 2
+                    if (action[0] == "D" or action[0] == "d"):
+                        input_x = 3
+                    if (action[0] == "E" or action[0] == "e"):
+                        input_x = 4
+                    if (action[0] == "F" or action[0] == "f"):
+                        input_x = 5
+                    if (action[0] == "G" or action[0] == "g"):
+                        input_x = 6
+                    if (action[0] == "H" or action[0] == "h"):
+                        input_x = 7
+                    if input_x == -1:
+                        values = action.split(" ")
+                        input_x = int(values[0])
+                        input_y =int(values[1])
+                    else:
+                        input_y = 8-int(action[1])
+                    tableau.insertMove(input_x, input_y, tableau.getCurPlayer())
+            except:
+                print("Commande non comprise")
+                traceback.print_exc(file=sys.stdout)
+                tableau.insertMove(-2, -2, -1)

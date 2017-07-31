@@ -7,6 +7,8 @@ from roi import roi
 from reine import reine
 import chess_interface
 import queue
+import chess_server
+import time
 
 class tableau():
     _tableau = [ [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None] ]
@@ -18,6 +20,8 @@ class tableau():
     _interface = None
     _queue = None
     _possible = set()
+    _server = None
+    _client = None
     
     def __init__(self, interface):
         self.reset()
@@ -68,6 +72,7 @@ class tableau():
         self._tableau[5][7]=fou(piece._players['BLANC'])
         self._tableau[6][7]=cavalier(piece._players['BLANC'])
         self._tableau[7][7]=tour(piece._players['BLANC'])
+        self._curPlayer = -1
 
     def computePossible(self, color, array):
         for X in range(0, 8):
@@ -199,6 +204,13 @@ class tableau():
             return 0
 
     def play(self, pos_x, pos_y):
+        if self._client != None and self._curPlayer == 1:
+            self._client.sendData((pos_x, pos_y, self._curPlayer)) # client is white
+        if self._server != None and self._curPlayer == -1:
+            if not self._server.isConnected():
+                print ("No client connected to the server")
+                return
+            self._server.sendData((pos_x, pos_y, self._curPlayer)) # server is black
         if self._selected == False:
             self._possible.clear()
             pionV = self.getPion(pos_x, pos_y)
@@ -268,10 +280,12 @@ class tableau():
         self._curPlayer = (-1) * self._curPlayer
 
     def insertMove(self, pos_x, pos_y, curPlayer):
-        print("Inserting data")
         self._queue.put((pos_x, pos_y, curPlayer))
 
     def openFile(self, filename):
+        if self._server != None or self._client != None:
+            print ("load file not permitted while playing in network")
+            return
         if filename != "":
             for X in range(0, 8):
                 for Y in range(0, 8):
@@ -308,17 +322,75 @@ class tableau():
                     if (pion != None):
                         file.write(str(X)+","+str(Y)+","+pion.getLetter()+"," + pion.getColor() + "\n")
             file.close()
-        
+
     def start(self):
         self._interface.draw(self)
         while True:
-            print ("Main loop")
             self._interface.mainLoop(self)
-            item = self._queue.get(True, None)
-            if (item[0] == -1 and item[1] == -1):
+            try:
+                 item = self._queue.get(True, 1)
+            except KeyboardInterrupt:
+                 item = (-1,-1,-1)
+            except queue.Empty:
+                 continue
+            if item[0] == -1:
+                if item[1] == -1:
+                    print ("Exiting ...")
+                elif item[1] == -2:
+                    print ("Connection closed by opponent")
+                else:
+                    pass
+                if self._client != None:
+                    print ("Stopping client")
+                    if item[1] == -1:
+                        self._client.sendData((-1,-2,-1))
+                    self._client.stop()
+                if self._server != None:
+                    print ("Stopping server")
+                    if item[1] == -1:
+                        self._server.sendData((-1,-2,-1))
+                    self._server.stop()
                 break
-            elif (item[0] == -2 and item[1] == -2):
+            elif item[0] == -2:
                 pass
             else:
                 self.play(item[0], item[1])
-                self._interface.draw(self)
+            self._interface.draw(self)
+
+    def askForAction(self):
+        if (self._server != None and self._curPlayer == -1):
+            return True
+        if (self._client != None and self._curPlayer == 1):
+            return True
+        if (self._client == None and self._server == None):
+            return True
+        return False
+
+    def stopServer(self):
+        self._server.stop()
+        self._server = None
+
+    def stopClient(self):
+        self._client.stop()
+        self._client = None
+
+    def startServer(self, port):
+        try:
+            self._server = chess_server.chessServer(self._queue, port)
+            self._server.start()
+            self.reset()
+        except:
+            self._server = None
+
+    def startClient(self, host, port):
+        try:
+            self._client = chess_server.chessClient(self._queue, host, port)
+            self._client.start()
+            time.sleep(2)
+            if (self._client.isConnected()):
+                self.reset()
+            else:
+                self._client = None
+        except Exception as e:
+            print (e)
+            self._client = None
