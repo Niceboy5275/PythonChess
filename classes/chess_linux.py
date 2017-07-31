@@ -27,23 +27,23 @@ class chess_linux(chessInterface):
             piece = input("Piece : ")
             while (True):
                 if piece == "P":
-                    tableau.setPromoted(pion.pion(curPlayer), curPlayer)
+                    tableau.setPromoted(pion.pion(curPlayer))
                     break
                 elif piece == "T":
-                    tableau.setPromoted(tour.tour(curPlayer), curPlayer)
+                    tableau.setPromoted(tour.tour(curPlayer))
                     break
                 elif piece == "C":
-                    tableau.setPromoted(cavalier.cavalier(curPlayer), curPlayer)
+                    tableau.setPromoted(cavalier.cavalier(curPlayer))
                     break
                 elif piece == "F":
-                    tableau.setPromoted(fou.fou(curPlayer), curPlayer)
+                    tableau.setPromoted(fou.fou(curPlayer))
                     break
                 elif piece == "Q":
-                    tableau.setPromoted(reine.reine(curPlayer), curPlayer)
+                    tableau.setPromoted(reine.reine(curPlayer))
                     break
                 else:
                     piece = input("Piece : ")
-            draw()
+            self.draw(tableau)
         except KeyboardInterrupt:
             tableau.insertMove(-1, -1, -1)
     

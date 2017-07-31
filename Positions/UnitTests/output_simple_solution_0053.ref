@@ -1,3 +1,4 @@
+Joueur blanc
   ****    ****    ****    ****    
 8 *TN* CN *FN* QN *KN* FN *CN* TN 
   ****    ****    ****    ****    
@@ -24,9 +25,8 @@
       ****    ****    ****    ****
     A   B   C   D   E   F   G   H
 
-Main loop
-Joueur blanc
-Action :   ****    ****    ****    ****    
+Action : Joueur blanc
+  ****    ****    ****    ****    
 8 ****    ****    **** CN ****    
   ****    ****    ****    ****    
       ****    ****    ****    ****
@@ -52,10 +52,34 @@ Action :   ****    ****    ****    ****
       ****    ****    ****    ****
     A   B   C   D   E   F   G   H
 
-Inserting data
-Main loop
 Joueur blanc
-Action : Inserting data
+  ****    ****    ****    ****    
+8 ****    ****    **** CN ****    
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+7     **** PB *PB* KN **** PB *TB*
+      ****    ****    ****    ****
+  ****    ****    ****    ****    
+6 ****    ****    ****    ****    
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+5     ****    **** KB ****    ****
+      ****    ****    ****    ****
+  ****    ****    ****    ****    
+4 ****    ****    ****    ****    
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+3     ****    ****    ****    ****
+      ****    ****    ****    ****
+  ****    ****    ****    ****    
+2 ****    ****    ****    ****    
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+1     ****    ****    ****    ****
+      ****    ****    ****    ****
+    A   B   C   D   E   F   G   H
+
+Action : Joueur blanc
   ****    ****    ****++++++++    
 8 ****    ****    ****+CN+++++    
   ****    ****    ****++++++++    
@@ -82,11 +106,9 @@ Action : Inserting data
       ****    ****    ****    ****
     A   B   C   D   E   F   G   H
 
-Main loop
-Joueur blanc
-Action : Inserting data
-Enter the type of piece you want (P, T, C, F, Q) :
+Action : Enter the type of piece you want (P, T, C, F, Q) :
 Piece : Echec et mat !
+Joueur noir
   ****    ****    ****    ****    
 8 ****    ****    **** CN *CB*    
   ****    ****    ****    ****    
@@ -113,6 +135,4 @@ Piece : Echec et mat !
       ****    ****    ****    ****
     A   B   C   D   E   F   G   H
 
-Main loop
-Joueur noir
-Action : Inserting data
+Action : Exiting ...

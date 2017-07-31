@@ -1,3 +1,4 @@
+Joueur blanc
   ****    ****    ****    ****    
 8 *TN* CN *FN* QN *KN* FN *CN* TN 
   ****    ****    ****    ****    
@@ -24,9 +25,8 @@
       ****    ****    ****    ****
     A   B   C   D   E   F   G   H
 
-Main loop
-Joueur blanc
-Action :   ****    ****    ****    ****    
+Action : Joueur blanc
+  ****    ****    ****    ****    
 8 ****    ****    ****    **** KN 
   ****    ****    ****    ****    
       ****    ****    ****    ****
@@ -52,13 +52,37 @@ Action :   ****    ****    ****    ****
       ****    ****    ****    ****
     A   B   C   D   E   F   G   H
 
-Inserting data
-Main loop
 Joueur blanc
-Action : Inserting data
-Roque : Entering
+  ****    ****    ****    ****    
+8 ****    ****    ****    **** KN 
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+7     ****    ****    ****    ****
+      ****    ****    ****    ****
+  ****    ****    ****    ****    
+6 ****    ****    **** KB *FB*    
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+5     ****    ****    ****    ****
+      ****    ****    ****    ****
+  ****    ****    ****    ****    
+4 ****    ****    ****    ****    
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+3     ****    ****    ****    ****
+      ****    ****    ****    ****
+  ****    ****    ****    ****    
+2 ****    ****    ****    ****    
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+1  FB ****    ****    ****    ****
+      ****    ****    ****    ****
+    A   B   C   D   E   F   G   H
+
+Action : Roque : Entering
 Roque : Left tower has moved
 Roque : Right tower has moved
+Joueur blanc
   ****    ****    ****    ****    
 8 ****    ****    ****    **** KN 
   ****    ****    ****    ****    
@@ -85,10 +109,8 @@ Roque : Right tower has moved
       ****    ****    ****    ****
     A   B   C   D   E   F   G   H
 
-Main loop
-Joueur blanc
-Action : Inserting data
-Echec et mat !
+Action : Echec et mat !
+Joueur noir
   ****    ****    ****    ****    
 8 ****    ****    ****    **** KN 
   ****    ****    ****    ****    
@@ -115,6 +137,4 @@ Echec et mat !
       ****    ****    ****    ****
     A   B   C   D   E   F   G   H
 
-Main loop
-Joueur noir
-Action : Inserting data
+Action : Exiting ...
