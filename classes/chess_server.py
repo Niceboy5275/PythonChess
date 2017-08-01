@@ -20,7 +20,7 @@ class chessServer(Thread):
         host = socket.gethostname() # Get local machine name
         s.bind((host, self._port))        # Bind to the port
 #        fcntl.fcntl(s, fcntl.F_SETFL, os.O_NONBLOCK)
-        print ("Listening on port %s/%s..." %(host, str(self._port)))
+        print ("Listening on port {h}/{p}...".format(p=self._port, h=host))
  
         s.listen(0)                 # Now wait for client connection.
         while self._running:
@@ -87,8 +87,8 @@ class chessClient(Thread):
         try:
             self._client = socket.socket()         # Create a socket object
             self._client.connect((self._host, self._port))        # Connect to the port
-#            fcntl.fcntl(self._client, fcntl.F_SETFL, os.O_NONBLOCK)
-            print ("connected on port %s/%s..." % (self._host, self._port))
+            fcntl.fcntl(self._client, fcntl.F_SETFL, os.O_NONBLOCK)
+            print ("connected on port {h}/{p}...".format(h=self._host, p=self._port))
 
             while self._running:
                 self._connected = True

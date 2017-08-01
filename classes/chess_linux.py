@@ -122,6 +122,12 @@ class chess_linux(chessInterface):
                 elif (action.find("stop client") != -1):
                     tableau.stopClient()
                     tableau.insertMove(-2, -2, -1)
+                elif (action.find("print moves") != -1):
+                    tableau.printMoves()
+                    tableau.insertMove(-2, -2, -1)
+                elif (action.find("undo") != -1):
+                    tableau.undoLastMove()
+                    tableau.insertMove(-2, -2, -1)
                 else:
                     input_x = -1
                     if (action[0] == "A" or action[0] == "a"):

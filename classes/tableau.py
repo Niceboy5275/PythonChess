@@ -9,6 +9,7 @@ import chess_interface
 import queue
 import chess_server
 import time
+from chess_recorder import recorder
 
 class tableau():
     _tableau = [ [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None], [None, None, None, None, None, None, None, None] ]
@@ -22,6 +23,8 @@ class tableau():
     _possible = set()
     _server = None
     _client = None
+    _recorder = recorder()
+    _currentMove = []
     
     def __init__(self, interface):
         self.reset()
@@ -91,6 +94,11 @@ class tableau():
 
     def setPion(self, X, Y, pion):
         if (X <= 7 and X >= 0 and Y <= 7 and Y >= 0):
+            oldPion=self._tableau[X][Y]
+            if oldPion != None:
+                self._currentMove.append((X, Y, oldPion.getLetter(), oldPion.getColor()))
+            else:
+                self._currentMove.append((X, Y, " ", 0))
             self._tableau[X][Y]=pion
 
     def getPion(self, X, Y):
@@ -153,29 +161,13 @@ class tableau():
                             self.setPion(posPion_X, posPion_Y, oldValue)
                             if (type(pion) == roi):
                                 if self._curPlayer == 1 and not self.isPossible(posPion_X, posPion_Y, possibleNoir):
-                                    print ("CurPos : " + str(X) + "/" + str(Y))
-                                    print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
-                                    print ("CheckMat - 3")
                                     return False
                                 if self._curPlayer == -1 and not self.isPossible(posPion_X, posPion_Y, possibleBlanc):
-                                    print ("CurPos : " + str(X) + "/" + str(Y))
-                                    print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
-                                    for (pX, pY) in possibleBlanc:
-                                        print ("Possible : " + str(pX) + "/" + str(pY))
-                                    print ("CheckMat - 4")
                                     return False
                             else:
                                 if self._curPlayer == 1 and not self.isPossible(roi_X, roi_Y, possibleNoir):
-                                    print ("CurPos : " + str(X) + "/" + str(Y))
-                                    print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
-                                    print ("CheckMat - 3")
                                     return False
                                 if self._curPlayer == -1 and not self.isPossible(roi_X, roi_Y, possibleBlanc):
-                                    print ("CurPos : " + str(X) + "/" + str(Y))
-                                    print ("NextPos : " + str(posPion_X) + "/" + str(posPion_Y))
-                                    for (pX, pY) in possibleBlanc:
-                                        print ("Possible : " + str(pX) + "/" + str(pY))
-                                    print ("CheckMat - 4")
                                     return False
         return True
         
@@ -228,8 +220,8 @@ class tableau():
             self._selected = False
             if self.isPossible(pos_x, pos_y, self._possible):
                 oldPion=self.getPion(pos_x, pos_y)
-                self.setPion(pos_x, pos_y, self._selectedPion)
                 self.setPion(self._init_x, self._init_y, None)
+                self.setPion(pos_x, pos_y, self._selectedPion)
                 if type(self._selectedPion) is roi:
                     #Check roque position
                     if (self._init_x - pos_x) * (self._init_x - pos_x) + (self._init_y - pos_y) * (self._init_y - pos_y) == 4:
@@ -256,6 +248,7 @@ class tableau():
                 if (echec == self._curPlayer):
                     self.setPion(pos_x, pos_y, oldPion)
                     self.setPion(self._init_x, self._init_y, self._selectedPion)
+                    self._currentMove = []
                 elif (echec == (-1 * self._curPlayer)):
                     self._selectedPion.setMoved()
                     if (self.checkMat()):
@@ -276,7 +269,10 @@ class tableau():
     def getCurPlayer(self):
         return self._curPlayer
 
-    def changePlayer(self):
+    def changePlayer(self, addMove = True):
+        if addMove:
+            self._recorder.addMove(self._currentMove)
+        self._currentMove=[]
         self._curPlayer = (-1) * self._curPlayer
 
     def insertMove(self, pos_x, pos_y, curPlayer):
@@ -312,16 +308,6 @@ class tableau():
                 self.setPion(int(values[0]), int(values[1]), pionV)
             self.setCurPlayer(-1)
             self._interface.draw(self)
-
-    def saveFile(self, filename):
-        if filename != "":
-            file = open(filename, 'w')
-            for Y in range(0, 8):
-                for X in range(0, 8):
-                    pion = tableau.getPion(X, Y)
-                    if (pion != None):
-                        file.write(str(X)+","+str(Y)+","+pion.getLetter()+"," + pion.getColor() + "\n")
-            file.close()
 
     def start(self):
         self._interface.draw(self)
@@ -365,6 +351,34 @@ class tableau():
         if (self._client == None and self._server == None):
             return True
         return False
+
+    def printMoves(self):
+        self._recorder.printMoves()
+        self._recorder.prettyPrintMoves()
+
+    def undoLastMove(self):
+        lastMove = self._recorder.getLastMove()
+        if lastMove != None:
+            for move in lastMove:
+                pionV = None
+                pionLetter = move[2]
+                color = move[3]
+                if pionLetter == "T":
+                    pionV = tour(color)
+                elif pionLetter == "C":
+                    pionV = cavalier(color)
+                elif pionLetter == "F":
+                    pionV = fou(color)
+                elif pionLetter == "K":
+                    pionV = roi(color)
+                elif pionLetter == "Q":
+                    pionV = reine(color)
+                elif pionLetter == "P":
+                    pionV = pion(color)
+                self.setPion(move[0], move[1], pionV)
+            self.changePlayer(False)
+        else:
+            print ("No moves recorded")
 
     def stopServer(self):
         self._server.stop()
