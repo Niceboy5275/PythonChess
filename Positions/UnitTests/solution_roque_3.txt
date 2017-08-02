@@ -1,0 +1,4 @@
+load Chess_Roque_3.chy
+e1
+d1
+quit

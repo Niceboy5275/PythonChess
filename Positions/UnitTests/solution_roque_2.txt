@@ -1,0 +1,4 @@
+load Chess_Roque_2.chy
+e1
+d1
+quit
