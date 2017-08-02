@@ -1,5 +1,5 @@
 export PATH=/c/Users/Vincent/AppData/Local/Programs/Python/Python36:$PATH
-for file in `ls -1 solution*.txt`
+for file in `ls -1 | egrep "solution_[0-9]+.txt"`
 do
     echo -n '.'
     python ../../classes/chess_main.py < $file > output_simple_$file
@@ -22,7 +22,7 @@ do
     fi
 done
 echo ""
-for file in `ls -1 solution*.txt`
+for file in `ls -1 | egrep "solution_[0-9]+.txt"`
 do
     echo -n '.'
     python ../../classes/chess_main.py linux < $file > output_linux_$file

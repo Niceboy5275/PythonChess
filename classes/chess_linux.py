@@ -23,13 +23,10 @@ class chess_linux(chessInterface):
     def showPromotion(self, tableau):
         try:
             curPlayer = tableau.getCurPlayer()
-            print("Enter the type of piece you want (P, T, C, F, Q) :")
+            print("Enter the type of piece you want (T, C, F, Q) :")
             piece = input("Piece : ")
             while (True):
-                if piece == "P":
-                    tableau.setPromoted(pion.pion(curPlayer))
-                    break
-                elif piece == "T":
+                if piece == "T":
                     tableau.setPromoted(tour.tour(curPlayer))
                     break
                 elif piece == "C":
@@ -49,10 +46,6 @@ class chess_linux(chessInterface):
     
         
     def draw(self, tableau):
-        if (tableau.getCurPlayer() == piece._players['NOIR']) :
-            print("Joueur noir")
-        else:
-            print("Joueur blanc")
         for Y in range(0,8):
             for Z in range(0,3):
                 strValue = ""
@@ -97,7 +90,10 @@ class chess_linux(chessInterface):
     def mainLoop(self, tableau):
         if tableau.askForAction() :
             try:
-                action = input("Action : ")
+                if (tableau.getCurPlayer() == piece._players['NOIR']) :
+                    action = input("Action (Joueur noir) : ")
+                else:
+                    action = input("Action (Joueur blanc) : ")
             except KeyboardInterrupt:
                 tableau.insertMove(-1, -1, -1)
                 return
@@ -107,6 +103,10 @@ class chess_linux(chessInterface):
                 elif (action.find("load") != -1):
                     values = action.split(" ")
                     tableau.openFile(values[1])
+                    tableau.insertMove(-2, -2, -1)
+                elif (action.find("save") != -1):
+                    values = action.split(" ")
+                    tableau.saveFile(values[1])
                     tableau.insertMove(-2, -2, -1)
                 elif (action.find("start server ") != -1):
                     values = action.split(" ")

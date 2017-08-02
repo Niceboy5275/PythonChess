@@ -219,6 +219,12 @@ class tableau():
         else:
             self._selected = False
             if self.isPossible(pos_x, pos_y, self._possible):
+                if type(self._selectedPion) is pion and pos_x != self._init_x and self.getPion(pos_x, pos_y) == None:
+                    # Prise en passant
+                    if (self._curPlayer == 1):
+                        self.setPion(pos_x, pos_y - 1, None)
+                    if (self._curPlayer == -1):
+                        self.setPion(pos_x, pos_y + 1, None)                
                 oldPion=self.getPion(pos_x, pos_y)
                 self.setPion(self._init_x, self._init_y, None)
                 self.setPion(pos_x, pos_y, self._selectedPion)
@@ -244,6 +250,22 @@ class tableau():
                         self._init_x = pos_x
                         self._init_y = pos_y
                         self._interface.showPromotion(self)
+                    if pos_y == 3 and self._selectedPion.getColor() == 1:
+                        if (pos_y - self._init_y == 2):
+                            neighborPion = self.getPion(pos_x - 1, pos_y)
+                            if type(neighborPion) is pion and neighborPion.getColor() == -1:
+                                neighborPion.setTakeableLeft(True)
+                            neighborPion = self.getPion(pos_x + 1, pos_y)
+                            if type(neighborPion) is pion and neighborPion.getColor() == -1:
+                                neighborPion.setTakeableRight(True)
+                    if pos_y == 4 and self._selectedPion.getColor() == -1:
+                        if (self._init_y - pos_y  == 2):
+                            neighborPion = self.getPion(pos_x - 1, pos_y)
+                            if type(neighborPion) is pion and neighborPion.getColor() == 1:
+                                neighborPion.setTakeableLeft(True)
+                            neighborPion = self.getPion(pos_x + 1, pos_y)
+                            if type(neighborPion) is pion and neighborPion.getColor() == 1:
+                                neighborPion.setTakeableRight(True)
                 echec = self.checkEchec()
                 if (echec == self._curPlayer):
                     self.setPion(pos_x, pos_y, oldPion)
@@ -263,6 +285,14 @@ class tableau():
                 print("Mouvement impossible")
             self._possible.clear()
 
+    def resetTakeable(self, curPlayer):
+        for X in range(0, 8):
+            for Y in range(0, 8):
+                curPion = self.getPion(X, Y)
+                if type(curPion) is pion and curPion.getColor() == curPlayer:
+                    curPion.setTakeableLeft(False)
+                    curPion.setTakeableRight(False)
+
     def setCurPlayer(self, curPlayer):
         self._curPlayer = curPlayer
 
@@ -273,6 +303,7 @@ class tableau():
         if addMove:
             self._recorder.addMove(self._currentMove)
         self._currentMove=[]
+        self.resetTakeable(self._curPlayer)
         self._curPlayer = (-1) * self._curPlayer
 
     def insertMove(self, pos_x, pos_y, curPlayer):
@@ -308,6 +339,16 @@ class tableau():
                 self.setPion(int(values[0]), int(values[1]), pionV)
             self.setCurPlayer(-1)
             self._interface.draw(self)
+
+    def saveFile(self, filename):
+        if filename != "":
+            file = open(filename, 'w')
+            for Y in range(0, 8):
+                for X in range(0, 8):
+                    pion = self.getPion(X, Y)
+                    if (pion != None):
+                        file.write(str(X)+","+str(Y)+","+pion.getLetter()+"," + pion.getColor() + "\n")
+            file.close()
 
     def start(self):
         self._interface.draw(self)

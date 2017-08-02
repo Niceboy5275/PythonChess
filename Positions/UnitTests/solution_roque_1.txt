@@ -1,0 +1,6 @@
+load Chess_Roque_1.chy
+e1
+c1
+e8
+g8
+quit
