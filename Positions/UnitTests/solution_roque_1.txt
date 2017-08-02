@@ -1,4 +1,4 @@
-load Chess_Roque.chy
+load Chess_Roque_1.chy
 e1
 c1
 e8
