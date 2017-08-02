@@ -19,13 +19,10 @@ class chess_simple(chessInterface):
     
     def showPromotion(self, tableau):
         curPlayer = tableau.getCurPlayer()
-        print("Enter the type of piece you want (P, T, C, F, Q) :")
+        print("Enter the type of piece you want (T, C, F, Q) :")
         piece = input("Piece : ")
         while (True):
-            if piece == "P":
-                tableau.setPromoted(pion.pion(curPlayer))
-                break
-            elif piece == "T":
+            if piece == "T":
                 tableau.setPromoted(tour.tour(curPlayer))
                 break
             elif piece == "C":
@@ -41,10 +38,6 @@ class chess_simple(chessInterface):
                 piece = input("Piece : ")
         
     def draw(self, tableau):
-        if (tableau.getCurPlayer() == piece._players['NOIR']) :
-            print("Joueur noir")
-        else:
-            print("Joueur blanc")
         for Y in range(0,8):
             for Z in range(0,3):
                 strValue = ""
@@ -79,13 +72,20 @@ class chess_simple(chessInterface):
 
     def mainLoop(self, tableau):
         if tableau.askForAction():
-            action = input("Action : ")
+            if (tableau.getCurPlayer() == piece._players['NOIR']) :
+                action = input("Action (Joueur noir) : ")
+            else:
+                action = input("Action (Joueur blanc) : ")
             try:
                 if (action == "quit"):
                     tableau.insertMove(-1, -1, -1)
                 elif (action.find("load") != -1):
                     values = action.split(" ")
                     tableau.openFile(values[1])
+                    tableau.insertMove(-2, -2, -1)
+                elif (action.find("save") != -1):
+                    values = action.split(" ")
+                    tableau.saveFile(values[1])
                     tableau.insertMove(-2, -2, -1)
                 elif (action.find("start server ") != -1):
                     values = action.split(" ")
