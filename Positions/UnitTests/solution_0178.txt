@@ -1,0 +1,4 @@
+load Chess_0178_v2.chy
+6 2
+4 1
+quit
