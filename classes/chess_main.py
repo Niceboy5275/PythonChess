@@ -11,7 +11,7 @@ elif len(sys.argv) == 2 and sys.argv[1] == "simple":
 elif len(sys.argv) == 2 and sys.argv[1] == "tkinter":
     interface = chess_tkinter()
 else:
-    interface = chess_tkinter()
+    interface = chess_simple()
     
 tab = tableau(interface)
 
