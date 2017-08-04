@@ -83,8 +83,9 @@ class chess_tkinter(chessInterface):
         if filename != "":    
             self.queue.put(("save", filename))
     
-    def startCB(self, port, window):
-        self.queue.put(("start_server", port))
+    def startCB(self, port, window, ok):
+        if ok:
+            self.queue.put(("start_server", int(port)))
         window.destroy()
         
     def startServer(self):
@@ -95,14 +96,17 @@ class chess_tkinter(chessInterface):
         portValue = StringVar()
         port = Entry(toplevel, textvariable=portValue)
         port.grid(row=0,column=1)
-        b = Button(toplevel, text="OK", width=10, command= lambda : self.startCB(int(port.get()), toplevel))
-        b.grid(row=1, column=1)
+        okButton = Button(toplevel, text="OK", width=10, command= lambda : self.startCB(port.get(), toplevel, True))
+        okButton.grid(row=1, column=1)
+        cancelButton = Button(toplevel, text="Cancel", width=10, command= lambda : self.startCB(port.get(), toplevel, False))
+        cancelButton.grid(row=1, column=0)
 
     def stopServer(self):
         self.queue.put(("stop_server", ))
         
-    def connectCB(self, host, port, window):
-        self.queue.put(("connect_server", host, port))
+    def connectCB(self, host, port, window, ok):
+        if ok:
+            self.queue.put(("connect_server", host, int(port)))
         window.destroy()
         
     def connectServer(self):
@@ -118,8 +122,10 @@ class chess_tkinter(chessInterface):
         portValue = StringVar()
         port = Entry(toplevel, textvariable=portValue)
         port.grid(row=1, column = 1)
-        b = Button(toplevel, text="OK", width=10, command= lambda : self.connectCB(host.get(), int(port.get()), toplevel))
-        b.grid(row=2, column = 1)
+        okButton = Button(toplevel, text="OK", width=10, command= lambda : self.connectCB(host.get(), port.get(), toplevel, True))
+        okButton.grid(row=2, column = 1)
+        cancelButton = Button(toplevel, text="Cancel", width=10, command= lambda : self.connectCB(host.get(), port.get(), toplevel, False))
+        cancelButton.grid(row=2, column = 0)
         
     def disconnectServer(self):
         self.queue.put(("disconnect_server", ))
