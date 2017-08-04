@@ -11,12 +11,9 @@ from chess_interface import chessInterface
 
 class chess_simple(chessInterface):
 
-    def showEchec(self):
-        print("Echec !")
-    
-    def showEchecEtMat(self):
-        print("Echec et mat !")
-    
+    def showMessage(self, message):
+        print(message)
+
     def showPromotion(self, tableau):
         curPlayer = tableau.getCurPlayer()
         print("Enter the type of piece you want (T, C, F, Q) :")

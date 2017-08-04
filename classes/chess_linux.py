@@ -14,12 +14,9 @@ class chess_linux(chessInterface):
     def __init__(self):
         pass
 
-    def showEchec(self):
-        print("Echec !")
-    
-    def showEchecEtMat(self):
-        print("Echec et mat !")
-    
+    def showMessage(self, message):
+        print(message)
+
     def showPromotion(self, tableau):
         try:
             curPlayer = tableau.getCurPlayer()

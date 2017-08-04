@@ -1,12 +1,9 @@
 class chessInterface:
 
+    def showMessage(self, message):
+        pass
+
     def draw(self):
-        pass
-
-    def showEchec(self):
-        pass
-
-    def showEchecEtMat(self):
         pass
 
     def showPromotion(self):
