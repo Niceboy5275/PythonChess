@@ -134,10 +134,8 @@ class tableau():
                         self.setPion(posRoiX, posRoiY, oldValue)
 
                         if self._curPlayer == 1 and not self.isPossible(posRoiX, posRoiY, possibleNoir):
-                            print ("CheckMat - 1")
                             return False
                         if self._curPlayer == -1 and not self.isPossible(posRoiX, posRoiY, possibleBlanc):
-                            print ("CheckMat - 2")
                             return False
                     
         # Check if by moving a piece, there is still mat position
@@ -200,7 +198,7 @@ class tableau():
             self._client.sendData((pos_x, pos_y, self._curPlayer)) # client is white
         if self._server != None and self._curPlayer == -1:
             if not self._server.isConnected():
-                print ("No client connected to the server")
+                self._interface.showMessage ("No client connected to the server")
                 return
             self._server.sendData((pos_x, pos_y, self._curPlayer)) # server is black
         if self._selected == False:
@@ -215,7 +213,7 @@ class tableau():
                 if type(pionV) is roi:
                     pionV.checkRoque(self, self._possible)
             else:
-                print ("Case non valide")
+                self._interface.showMessage ("Case non valide")
         else:
             self._selected = False
             if self.isPossible(pos_x, pos_y, self._possible):
@@ -274,15 +272,15 @@ class tableau():
                 elif (echec == (-1 * self._curPlayer)):
                     self._selectedPion.setMoved()
                     if (self.checkMat()):
-                        self._interface.showEchecEtMat()
+                        self._interface.showMessage("Echec et mat !")
                     else :
-                        self._interface.showEchec()
+                        self._interface.showMessage("Echec !")
                     self.changePlayer()
                 else:
                     self._selectedPion.setMoved()
                     self.changePlayer()
             else:
-                print("Mouvement impossible")
+                self._interface.showMessage("Mouvement impossible")
             self._possible.clear()
 
     def resetTakeable(self, curPlayer):
@@ -311,7 +309,7 @@ class tableau():
 
     def openFile(self, filename):
         if self._server != None or self._client != None:
-            print ("load file not permitted while playing in network")
+            self._interface.showMessage ("load file not permitted while playing in network")
             return
         if filename != "":
             for X in range(0, 8):
@@ -362,18 +360,18 @@ class tableau():
                  continue
             if item[0] == -1:
                 if item[1] == -1:
-                    print ("Exiting ...")
+                    self._interface.showMessage ("Exiting ...")
                 elif item[1] == -2:
-                    print ("Connection closed by opponent")
+                    self._interface.showMessage ("Connection closed by opponent")
                 else:
                     pass
                 if self._client != None:
-                    print ("Stopping client")
+                    self._interface.showMessage ("Stopping client")
                     if item[1] == -1:
                         self._client.sendData((-1,-2,-1))
                     self._client.stop()
                 if self._server != None:
-                    print ("Stopping server")
+                    self._interface.showMessage ("Stopping server")
                     if item[1] == -1:
                         self._server.sendData((-1,-2,-1))
                     self._server.stop()
@@ -419,7 +417,7 @@ class tableau():
                 self.setPion(move[0], move[1], pionV)
             self.changePlayer(False)
         else:
-            print ("No moves recorded")
+            self._interface.showMessage ("No moves recorded")
 
     def stopServer(self):
         self._server.stop()

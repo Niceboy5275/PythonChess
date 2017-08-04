@@ -11,12 +11,9 @@ from chess_interface import chessInterface
 
 class chess_simple(chessInterface):
 
-    def showEchec(self):
-        print("Echec !")
-    
-    def showEchecEtMat(self):
-        print("Echec et mat !")
-    
+    def showMessage(self, message):
+        print(message)
+
     def showPromotion(self, tableau):
         curPlayer = tableau.getCurPlayer()
         print("Enter the type of piece you want (T, C, F, Q) :")
@@ -107,6 +104,18 @@ class chess_simple(chessInterface):
                 elif (action.find("undo") != -1):
                     tableau.undoLastMove()
                     tableau.insertMove(-2, -2, -1)
+                elif (action.find("help") != -1):
+                    print ("Available commands:")
+                    print ("===================")
+                    print ("load <file name> : load a file with piece positions")
+                    print ("save <file name> : save current chessboard into file")
+                    print ("start server <port number> : start a server listening on given port")
+                    print ("stop server : stop the running server")
+                    print ("start client <ip> <port number> : connect to the server on given ip/ port")
+                    print ("stop client : stop the connection to the server")
+                    print ("undo : revert the last move")
+                    print ("print moves : print the moves (not in PGN format yet)"
+                    print ("help : print this help")
                 else:
                     input_x = -1
                     if (action[0] == "A" or action[0] == "a"):
