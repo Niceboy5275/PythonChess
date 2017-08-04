@@ -114,7 +114,7 @@ class chess_simple(chessInterface):
                     print ("start client <ip> <port number> : connect to the server on given ip/ port")
                     print ("stop client : stop the connection to the server")
                     print ("undo : revert the last move")
-                    print ("print moves : print the moves (not in PGN format yet)"
+                    print ("print moves : print the moves (not in PGN format yet)")
                     print ("help : print this help")
                 else:
                     input_x = -1
