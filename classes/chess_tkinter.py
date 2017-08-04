@@ -135,6 +135,7 @@ class chess_tkinter(chessInterface):
         toplevel.title("Warning !")
         label1 = Label(toplevel, text=message)
         label1.pack()
+        self.fenetre.update()
 
     def button1(self, event):
         pos_x = int((event.x - 10) / 40)

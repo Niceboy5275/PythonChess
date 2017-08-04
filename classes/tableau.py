@@ -92,10 +92,10 @@ class tableau():
             if ((self.getPion(pos_x, pos_y) == None) or (self.getPion(pos_x, pos_y).getColor() * color <= 0)):
                 array.add((pos_x, pos_y))
 
-    def setPion(self, X, Y, pion):
+    def setPion(self, X, Y, pion, store = True):
         if (X <= 7 and X >= 0 and Y <= 7 and Y >= 0):
             oldPion=self._tableau[X][Y]
-            if oldPion != None:
+            if oldPion != None and store == True:
                 self._currentMove.append((X, Y, oldPion.getLetter(), oldPion.getColor()))
             else:
                 self._currentMove.append((X, Y, " ", 0))
@@ -193,6 +193,17 @@ class tableau():
         else:              
             return 0
 
+    def checkPat(self, color):
+        array = set()
+        for X in range(0, 8):
+            for Y in range(0, 8):
+                pion = self.getPion(X, Y)
+                if pion != None and pion.getColor() == color:
+                    pion.move(X, Y, self, array)
+                    if len(array) > 0:
+                        return False
+        return True
+                    
     def play(self, pos_x, pos_y):
         if self._client != None and self._curPlayer == 1:
             self._client.sendData((pos_x, pos_y, self._curPlayer)) # client is white
@@ -212,6 +223,18 @@ class tableau():
                 pionV.move(pos_x, pos_y, self, self._possible)
                 if type(pionV) is roi:
                     pionV.checkRoque(self, self._possible)
+                    try:
+                        opponent = set()
+                        self.setPion(pos_x, pos_y, None, False)
+                        self.computePossible((-1) * self.getCurPlayer(), opponent)
+                        self.setPion(pos_x, pos_y, pionV, False)
+                        for item in opponent:
+                            try:
+                                self._possible.remove(item)
+                            except KeyError as e:
+                                continue
+                    except Exception as e:
+                        print (e)
             else:
                 self._interface.showMessage ("Case non valide")
         else:
@@ -279,6 +302,8 @@ class tableau():
                 else:
                     self._selectedPion.setMoved()
                     self.changePlayer()
+                if (self.checkPat(self.getCurPlayer())):
+                    self._interface.showMessage("Pat !")
             else:
                 self._interface.showMessage("Mouvement impossible")
             self._possible.clear()
