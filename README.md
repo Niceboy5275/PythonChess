@@ -13,9 +13,16 @@ Current functionalities developed:
 
 The chessboard looks like the following for each possible interfaces:
 
+Windows interface:
 ![Windows interface](tkinter.png)
+
+Linux interface
 ![Linux interface](linux.png)
+
+Simple interface
 ![Simple interface](simple.png)
+
+
 Missing functionalities:
 - IA to play alone
 - Export of the game in formatting
