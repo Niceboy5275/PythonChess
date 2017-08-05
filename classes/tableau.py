@@ -199,6 +199,7 @@ class tableau():
             for Y in range(0, 8):
                 pion = self.getPion(X, Y)
                 if pion != None and pion.getColor() == color:
+                    self._selectedPion = pion
                     pion.move(X, Y, self, array)
                     if len(array) > 0:
                         return False
@@ -223,18 +224,6 @@ class tableau():
                 pionV.move(pos_x, pos_y, self, self._possible)
                 if type(pionV) is roi:
                     pionV.checkRoque(self, self._possible)
-                    try:
-                        opponent = set()
-                        self.setPion(pos_x, pos_y, None, False)
-                        self.computePossible((-1) * self.getCurPlayer(), opponent)
-                        self.setPion(pos_x, pos_y, pionV, False)
-                        for item in opponent:
-                            try:
-                                self._possible.remove(item)
-                            except KeyError as e:
-                                continue
-                    except Exception as e:
-                        print (e)
             else:
                 self._interface.showMessage ("Case non valide")
         else:
@@ -302,8 +291,8 @@ class tableau():
                 else:
                     self._selectedPion.setMoved()
                     self.changePlayer()
-                if (self.checkPat(self.getCurPlayer())):
-                    self._interface.showMessage("Pat !")
+                    if (self.checkPat(self.getCurPlayer())):
+                        self._interface.showMessage("Pat !")
             else:
                 self._interface.showMessage("Mouvement impossible")
             self._possible.clear()

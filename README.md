@@ -11,6 +11,29 @@ Current functionalities developed:
 - Play through network
 - Undo possibility
 
+The chessboard looks like the following for each possible interfaces:
+
+Windows interface:
+
+python chess_main.py tkinter
+
+![Windows interface](tkinter.png)
+
+Linux interface:
+
+python chess_main.py linux
+
+![Linux interface](linux.png)
+
+Simple interface:
+
+python chess_main.py simple
+
+![Simple interface](simple.png)
+
+
 Missing functionalities:
 - IA to play alone
 - Export of the game in formatting
+
+
