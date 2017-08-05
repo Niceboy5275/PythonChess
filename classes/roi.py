@@ -11,6 +11,19 @@ class roi(piece):
         tableau.setPossible(pos_x + 1, pos_y, curColor, array)
         tableau.setPossible(pos_x + 1, pos_y - 1, curColor, array)
         tableau.setPossible(pos_x, pos_y - 1, curColor, array)
+        if self == tableau._selectedPion:
+            try:
+                opponent = set()
+                tableau.setPion(pos_x, pos_y, None, False)
+                tableau.computePossible((-1) * curColor, opponent)
+                tableau.setPion(pos_x, pos_y, self, False)
+                for item in opponent:
+                    try:
+                        array.remove(item)
+                    except KeyError as e:
+                        continue
+            except Exception as e:
+                print (e)
 
     def checkRoque(self, tableau, array):
         #King has moved ==> Roque not possible
