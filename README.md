@@ -11,6 +11,13 @@ Current functionalities developed:
 - Play through network
 - Undo possibility
 
+The chessboard looks like the following for each possible interfaces:
+
+![Windows interface](tkinter.png)
+![Linux interface](linux.png)
+![Simple interface](simple.png)
 Missing functionalities:
 - IA to play alone
 - Export of the game in formatting
+
+
