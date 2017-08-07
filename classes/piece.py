@@ -1,4 +1,6 @@
-class piece(object):
+from abc import ABCMeta, abstractmethod
+
+class piece(metaclass=ABCMeta):
     _players = {'BLANC' : -1, 'NOIR' : 1}
     _color = 0
     _moved = False
@@ -6,17 +8,16 @@ class piece(object):
     def __init__(self, color):
         self._color = color
 
-    def move(self, pox_x, pos_y, tableau, isPossible):
+    @abstractmethod
+    def move(self, pox_x, pos_y, tableau, isPossible):  #pragma: no cover
         raise NotImplementedException()
 
-    def getLetter(self):
+    @abstractmethod
+    def getLetter(self):  #pragma: no cover
         raise NotImplementedException()
 
     def getColor(self):
         return self._color
-
-    def getImage(self):
-        raise NotImplementedException()
 
     def setMoved(self):
         self._moved=True

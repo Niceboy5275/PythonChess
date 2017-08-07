@@ -1,0 +1,38 @@
+  ****    ****    ****    ****    
+8 *TN* CN *FN* QN *KN* FN *CN* TN 
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+7  PN *PN* PN *PN* PN *PN* PN *PN*
+      ****    ****    ****    ****
+  ****    ****    ****    ****    
+6 ****    ****    ****    ****    
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+5     ****    ****    ****    ****
+      ****    ****    ****    ****
+  ****    ****    ****    ****    
+4 ****    ****    ****    ****    
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+3     ****    ****    ****    ****
+      ****    ****    ****    ****
+  ****    ****    ****    ****    
+2 *PB* PB *PB* PB *PB* PB *PB* PB 
+  ****    ****    ****    ****    
+      ****    ****    ****    ****
+1  TB *CB* FB *QB* KB *FB* CB *TB*
+      ****    ****    ****    ****
+    A   B   C   D   E   F   G   H
+
+Action (Joueur blanc) : Available commands:
+===================
+load <file name> : load a file with piece positions
+save <file name> : save current chessboard into file
+start server <port number> : start a server listening on given port
+stop server : stop the running server
+start client <ip> <port number> : connect to the server on given ip/ port
+stop client : stop the connection to the server
+undo : revert the last move
+print moves : print the moves (not in PGN format yet)
+help : print this help
+Action (Joueur blanc) : Exiting ...

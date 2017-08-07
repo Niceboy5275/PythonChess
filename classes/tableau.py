@@ -34,7 +34,7 @@ class tableau():
     def setPromoted(self, pion):
         if self._curPlayer != pion.getColor():
             return 0
-        self.setPion(self._init_x, self._init_y, pion)       
+        self.setPion(self._init_x, self._init_y, pion, False)       
         
     def reset(self):
         for X in range(0, 8):
@@ -95,10 +95,11 @@ class tableau():
     def setPion(self, X, Y, pion, store = True):
         if (X <= 7 and X >= 0 and Y <= 7 and Y >= 0):
             oldPion=self._tableau[X][Y]
-            if oldPion != None and store == True:
-                self._currentMove.append((X, Y, oldPion.getLetter(), oldPion.getColor()))
-            else:
-                self._currentMove.append((X, Y, " ", 0))
+            if store:
+                if oldPion != None:
+                    self._currentMove.append((X, Y, oldPion.getLetter(), oldPion.getColor()))
+                else:
+                    self._currentMove.append((X, Y, " ", 0))
             self._tableau[X][Y]=pion
 
     def getPion(self, X, Y):
@@ -328,7 +329,7 @@ class tableau():
         if filename != "":
             for X in range(0, 8):
                 for Y in range(0, 8):
-                    self.setPion(X, Y, None)
+                    self.setPion(X, Y, None, False)
             with open(filename) as f:
                 content = f.readlines()
                 f.close()
@@ -348,7 +349,7 @@ class tableau():
                     pionV = reine(color)
                 elif pionLetter == "P":
                     pionV = pion(color)
-                self.setPion(int(values[0]), int(values[1]), pionV)
+                self.setPion(int(values[0]), int(values[1]), pionV, False)
             self.setCurPlayer(-1)
             self._interface.draw(self)
 

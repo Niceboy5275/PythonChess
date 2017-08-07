@@ -141,6 +141,6 @@ class chess_simple(chessInterface):
                     else:
                         input_y = 8-int(action[1])
                     tableau.insertMove(input_x, input_y, tableau.getCurPlayer())
-            except:
+            except:   #pragma: no cover
                 print("Commande non comprise")
                 traceback.print_exc(file=sys.stdout)

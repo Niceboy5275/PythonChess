@@ -1,0 +1,4 @@
+save ./initial.chy
+load ./initial.chy
+quit
+
