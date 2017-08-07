@@ -1,4 +1,20 @@
 save ./initial.chy
 load ./initial.chy
+a2
+a4
+b7
+b5
+c2
+c4
+d7
+d5
+e2
+e4
+f7
+f5
+g2
+g4
+h7
+h5
 quit
 

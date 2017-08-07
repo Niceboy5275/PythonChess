@@ -113,7 +113,7 @@ class chess_linux(chessInterface):
                 elif (action.find("stop server") != -1):
                     tableau.stopServer()
                     tableau.insertMove(-2, -2, -1)
-                elif (action.find("stop client") != -1):
+                elif (action.find("stop client") != -1): #pragma: no cover
                     tableau.stopClient()
                     tableau.insertMove(-2, -2, -1)
                 elif (action.find("print moves") != -1):

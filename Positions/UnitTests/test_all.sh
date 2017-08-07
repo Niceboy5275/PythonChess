@@ -82,5 +82,6 @@ do
     fi
 done
 echo ""
-coverage3.exe report
+coverage3.exe report > coverage.txt
+cat coverage.txt
 coverage3.exe html

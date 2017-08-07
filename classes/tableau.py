@@ -360,7 +360,7 @@ class tableau():
                 for X in range(0, 8):
                     pion = self.getPion(X, Y)
                     if (pion != None):
-                        file.write(str(X)+","+str(Y)+","+pion.getLetter()+"," + pion.getColor() + "\n")
+                        file.write(str(X)+","+str(Y)+","+pion.getLetter()+"," + str(pion.getColor()) + "\n")
             file.close()
 
     def start(self):
