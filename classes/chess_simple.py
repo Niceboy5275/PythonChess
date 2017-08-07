@@ -95,7 +95,7 @@ class chess_simple(chessInterface):
                 elif (action.find("stop server") != -1):
                     tableau.stopServer()
                     tableau.insertMove(-2, -2, -1)
-                elif (action.find("stop client") != -1):
+                elif (action.find("stop client") != -1): #pragma: no cover
                     tableau.stopClient()
                     tableau.insertMove(-2, -2, -1)
                 elif (action.find("print moves") != -1):
@@ -141,6 +141,6 @@ class chess_simple(chessInterface):
                     else:
                         input_y = 8-int(action[1])
                     tableau.insertMove(input_x, input_y, tableau.getCurPlayer())
-            except:
+            except:   #pragma: no cover
                 print("Commande non comprise")
                 traceback.print_exc(file=sys.stdout)

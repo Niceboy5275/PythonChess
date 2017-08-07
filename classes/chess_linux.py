@@ -38,7 +38,7 @@ class chess_linux(chessInterface):
                 else:
                     piece = input("Piece : ")
             self.draw(tableau)
-        except KeyboardInterrupt:
+        except KeyboardInterrupt:  #pragma: no cover
             tableau.insertMove(-1, -1, -1)
     
         
@@ -71,13 +71,10 @@ class chess_linux(chessInterface):
                                 bkg_pion = 42
                             color = "1;38"
                             pionString = pionClass.getLetter()
-                        elif (pionClass.getColor() > 0):
+                        else:
                             if (tableau.getCurPlayer() == piece._players['NOIR']):
                                 bkg_pion = 42
                             color = "1;30"
-                            pionString = pionClass.getLetter()
-                        else:
-                            bkg_pion = bkg
                             pionString = pionClass.getLetter()
                         strValue = strValue + '\033[1;38;' + str(bkg) + 'm \033[0m\033[' + color + ';' + str(bkg_pion) + 'm ' + pionString + ' \033[0m\033[1;38;' + str(bkg) + 'm \033[0m'
                 print(strValue)
@@ -91,7 +88,7 @@ class chess_linux(chessInterface):
                     action = input("Action (Joueur noir) : ")
                 else:
                     action = input("Action (Joueur blanc) : ")
-            except KeyboardInterrupt:
+            except KeyboardInterrupt: #pragma: no cover
                 tableau.insertMove(-1, -1, -1)
                 return
             try:
@@ -116,7 +113,7 @@ class chess_linux(chessInterface):
                 elif (action.find("stop server") != -1):
                     tableau.stopServer()
                     tableau.insertMove(-2, -2, -1)
-                elif (action.find("stop client") != -1):
+                elif (action.find("stop client") != -1): #pragma: no cover
                     tableau.stopClient()
                     tableau.insertMove(-2, -2, -1)
                 elif (action.find("print moves") != -1):
@@ -162,7 +159,7 @@ class chess_linux(chessInterface):
                     else:
                         input_y = 8-int(action[1])
                     tableau.insertMove(input_x, input_y, tableau.getCurPlayer())
-            except:
+            except:   #pragma: no cover
                 print("Commande non comprise")
                 traceback.print_exc(file=sys.stdout)
                 tableau.insertMove(-2, -2, -1)

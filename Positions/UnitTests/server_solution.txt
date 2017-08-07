@@ -1,0 +1,5 @@
+start server 12345
+e2
+e4
+stop server
+quit

@@ -1,13 +1,19 @@
-class chessInterface:
+from abc import ABCMeta, abstractmethod
 
-    def showMessage(self, message):
+class chessInterface(metaclass=ABCMeta):
+
+    @abstractmethod
+    def showMessage(self, message): #pragma: no cover
         pass
 
-    def draw(self):
+    @abstractmethod
+    def draw(self): #pragma: no cover
         pass
 
-    def showPromotion(self):
+    @abstractmethod
+    def showPromotion(self): #pragma: no cover
         pass
 
-    def mainLoop(self):
+    @abstractmethod
+    def mainLoop(self): #pragma: no cover
         pass

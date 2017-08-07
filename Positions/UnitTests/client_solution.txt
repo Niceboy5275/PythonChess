@@ -1,0 +1,5 @@
+start client localhost 12345
+e7
+e5
+stop client
+quit

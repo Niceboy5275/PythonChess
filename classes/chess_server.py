@@ -5,7 +5,7 @@ import ast
 from time import sleep
 import errno
 
-class chessServer(Thread):
+class chessServer(Thread): #pragma: no cover
 
     def __init__(self, q, port):
         Thread.__init__(self)
@@ -61,7 +61,7 @@ class chessServer(Thread):
         if self._server != None:
             self._server.close()
 
-class chessClient(Thread):
+class chessClient(Thread): #pragma: no cover
 
     def __init__(self, q, host, port):
         Thread.__init__(self)
