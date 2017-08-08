@@ -1,0 +1,16 @@
+load Chess_black_mat.chy
+c8
+c1
+h1
+h2
+c1
+c8
+h2
+h1
+a8
+a1
+h1
+h2
+c8
+c2
+quit

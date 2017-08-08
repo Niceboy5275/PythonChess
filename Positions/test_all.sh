@@ -1,4 +1,5 @@
 export PATH=/c/Users/vdesoutter/AppData/Local/Programs/Python/Python36/:/c/Users/vdesoutter/AppData/Local/Programs/Python/Python36/Scripts:$PATH
+coverage3.exe erase
 for file in `ls -1 | egrep "^solution_[0-9]+.txt"`
 do
     echo -n '.'
@@ -66,7 +67,7 @@ echo ""
 for file in `ls -1 solution_*.txt | egrep -v "^solution_[0-9]+.txt"`
 do
     echo -n '.'
-    coverage3.exe run -a --omit */chess_tkinter.py ../classes/chess_main.py < $file > output_linux_$file
+    coverage3.exe run -a --omit */chess_tkinter.py ../classes/chess_main.py linux < $file > output_linux_$file
     output_ref=`echo "output_linux_$file" | sed 's/txt/ref/g'`
     touch $output_ref
     dos2unix $output_ref 2> /dev/null

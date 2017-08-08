@@ -32,9 +32,9 @@ class tableau():
         self._queue = queue.Queue()
 
     def setPromoted(self, pion):
-        if self._curPlayer != pion.getColor():
+        if self._curPlayer != pion.getColor(): #pragma: no cover
             return 0
-        self.setPion(self._init_x, self._init_y, pion, False)       
+        self.setPion(self._init_x, self._init_y, pion)       
         
     def reset(self):
         for X in range(0, 8):
@@ -92,7 +92,7 @@ class tableau():
             if ((self.getPion(pos_x, pos_y) == None) or (self.getPion(pos_x, pos_y).getColor() * color <= 0)):
                 array.add((pos_x, pos_y))
 
-    def setPion(self, X, Y, pion, store = True):
+    def setPion(self, X, Y, pion, store = False):
         if (X <= 7 and X >= 0 and Y <= 7 and Y >= 0):
             oldPion=self._tableau[X][Y]
             if store:
@@ -120,25 +120,25 @@ class tableau():
                 if type(pion) == roi and ((pion.getColor() == piece._players['NOIR'] and self._curPlayer == -1) or (pion.getColor() == piece._players['BLANC'] and self._curPlayer == 1)):
                     roi_X = X
                     roi_Y = Y
-                    posPion = set()
-                    pion.move(X, Y, self, posPion)
-                    for (posRoiX, posRoiY) in posPion:
-                        oldValue = self.getPion(posRoiX, posRoiY)
-                        self.setPion(posRoiX, posRoiY, pion)
-                        self.setPion(X, Y, None)
-                        # compute Possible
-                        possibleBlanc = set()
-                        possibleNoir = set()
-                        self.computePossible(piece._players['NOIR'], possibleNoir)
-                        self.computePossible(piece._players['BLANC'], possibleBlanc)
-                        self.setPion(X, Y, pion)
-                        self.setPion(posRoiX, posRoiY, oldValue)
-
-                        if self._curPlayer == 1 and not self.isPossible(posRoiX, posRoiY, possibleNoir):
-                            return False
-                        if self._curPlayer == -1 and not self.isPossible(posRoiX, posRoiY, possibleBlanc):
-                            return False
-                    
+#                    posPion = set()
+#                    pion.move(X, Y, self, posPion)
+#                    for (posRoiX, posRoiY) in posPion:
+#                        oldValue = self.getPion(posRoiX, posRoiY)
+#                        self.setPion(posRoiX, posRoiY, pion)
+#                        self.setPion(X, Y, None)
+#                        # compute Possible
+#                        possibleBlanc = set()
+#                        possibleNoir = set()
+#                        self.computePossible(piece._players['NOIR'], possibleNoir)
+#                        self.computePossible(piece._players['BLANC'], possibleBlanc)
+#                        self.setPion(X, Y, pion)
+#                        self.setPion(posRoiX, posRoiY, oldValue)
+#
+#                        if self._curPlayer == 1 and not self.isPossible(posRoiX, posRoiY, possibleNoir):
+#                            return False
+#                        if self._curPlayer == -1 and not self.isPossible(posRoiX, posRoiY, possibleBlanc):
+#                            return False
+#                    
         # Check if by moving a piece, there is still mat position
         for X in range(0, 8):
             for Y in range(0, 8):
@@ -185,7 +185,7 @@ class tableau():
                         noirEchec=True
                     if (pion.getColor() == piece._players['BLANC'] and self.isPossible(X, Y, possibleNoir) == 1):
                         blancEchec=True
-        if (noirEchec and blancEchec):
+        if (noirEchec and blancEchec): #pragma: no cover 
             return self._curPlayer
         elif (noirEchec):
             return piece._players['NOIR']
@@ -207,9 +207,9 @@ class tableau():
         return True
                     
     def play(self, pos_x, pos_y):
-        if self._client != None and self._curPlayer == 1:
+        if self._client != None and self._curPlayer == 1: #pragma: no cover 
             self._client.sendData((pos_x, pos_y, self._curPlayer)) # client is white
-        if self._server != None and self._curPlayer == -1:
+        if self._server != None and self._curPlayer == -1: #pragma: no cover 
             if not self._server.isConnected():
                 self._interface.showMessage ("No client connected to the server")
                 return
@@ -233,25 +233,25 @@ class tableau():
                 if type(self._selectedPion) is pion and pos_x != self._init_x and self.getPion(pos_x, pos_y) == None:
                     # Prise en passant
                     if (self._curPlayer == 1):
-                        self.setPion(pos_x, pos_y - 1, None)
+                        self.setPion(pos_x, pos_y - 1, None, True)
                     if (self._curPlayer == -1):
-                        self.setPion(pos_x, pos_y + 1, None)                
+                        self.setPion(pos_x, pos_y + 1, None, True)                
                 oldPion=self.getPion(pos_x, pos_y)
-                self.setPion(self._init_x, self._init_y, None)
-                self.setPion(pos_x, pos_y, self._selectedPion)
+                self.setPion(self._init_x, self._init_y, None, True)
+                self.setPion(pos_x, pos_y, self._selectedPion, True)
                 if type(self._selectedPion) is roi:
                     #Check roque position
                     if (self._init_x - pos_x) * (self._init_x - pos_x) + (self._init_y - pos_y) * (self._init_y - pos_y) == 4:
                         if self._init_x > pos_x:
                             # Left roque
                             tour = self.getPion(0, self._init_y)
-                            self.setPion(3, self._init_y, tour)
-                            self.setPion(0, self._init_y, None)
+                            self.setPion(3, self._init_y, tour, True)
+                            self.setPion(0, self._init_y, None, True)
                         else:
                             #right roque
                             tour = self.getPion(7, self._init_y)
-                            self.setPion(5, self._init_y, tour)
-                            self.setPion(7, self._init_y, None)
+                            self.setPion(5, self._init_y, tour, True)
+                            self.setPion(7, self._init_y, None, True)
                 if type(self._selectedPion) is pion:
                     if pos_y == 7 and self._selectedPion.getColor() == 1:
                         self._init_x = pos_x
@@ -323,13 +323,13 @@ class tableau():
         self._queue.put((pos_x, pos_y, curPlayer))
 
     def openFile(self, filename):
-        if self._server != None or self._client != None:
+        if self._server != None or self._client != None: #pragma: no cover 
             self._interface.showMessage ("load file not permitted while playing in network")
             return
         if filename != "":
             for X in range(0, 8):
                 for Y in range(0, 8):
-                    self.setPion(X, Y, None, False)
+                    self.setPion(X, Y, None)
             with open(filename) as f:
                 content = f.readlines()
                 f.close()
@@ -349,7 +349,7 @@ class tableau():
                     pionV = reine(color)
                 elif pionLetter == "P":
                     pionV = pion(color)
-                self.setPion(int(values[0]), int(values[1]), pionV, False)
+                self.setPion(int(values[0]), int(values[1]), pionV)
             self.setCurPlayer(-1)
             self._interface.draw(self)
 
@@ -369,23 +369,23 @@ class tableau():
             self._interface.mainLoop(self)
             try:
                  item = self._queue.get(True, 1)
-            except KeyboardInterrupt:
+            except KeyboardInterrupt: #pragma: no cover 
                  item = (-1,-1,-1)
             except queue.Empty:
                  continue
             if item[0] == -1:
                 if item[1] == -1:
                     self._interface.showMessage ("Exiting ...")
-                elif item[1] == -2:
+                elif item[1] == -2: #pragma: no cover 
                     self._interface.showMessage ("Connection closed by opponent")
                 else:
                     pass
-                if self._client != None:
+                if self._client != None: #pragma: no cover 
                     self._interface.showMessage ("Stopping client")
                     if item[1] == -1:
                         self._client.sendData((-1,-2,-1))
                     self._client.stop()
-                if self._server != None:
+                if self._server != None: #pragma: no cover 
                     self._interface.showMessage ("Stopping server")
                     if item[1] == -1:
                         self._server.sendData((-1,-2,-1))
@@ -400,11 +400,11 @@ class tableau():
     def askForAction(self):
         if (self._server != None and self._curPlayer == -1):
             return True
-        if (self._client != None and self._curPlayer == 1):
+        if (self._client != None and self._curPlayer == 1): #pragma: no cover 
             return True
         if (self._client == None and self._server == None):
             return True
-        return False
+        return False #pragma: no cover 
 
     def printMoves(self):
         self._recorder.printMoves()
@@ -429,7 +429,7 @@ class tableau():
                     pionV = reine(color)
                 elif pionLetter == "P":
                     pionV = pion(color)
-                self.setPion(move[0], move[1], pionV)
+                self.setPion(move[0], move[1], pionV, False)
             self.changePlayer(False)
         else:
             self._interface.showMessage ("No moves recorded")
@@ -438,16 +438,16 @@ class tableau():
         self._server.stop()
         self._server = None
 
-    def stopClient(self):
+    def stopClient(self): #pragma: no cover 
         self._client.stop()
         self._client = None
 
-    def startServer(self, port):
+    def startServer(self, port): 
         try:
             self._server = chess_server.chessServer(self._queue, port)
             self._server.start()
             self.reset()
-        except:
+        except: #pragma: no cover 
             self._server = None
 
     def startClient(self, host, port):
@@ -456,9 +456,9 @@ class tableau():
             self._client.start()
             time.sleep(2)
             if (self._client.isConnected()):
-                self.reset()
+                self.reset() #pragma: no cover 
             else:
                 self._client = None
-        except Exception as e:
+        except Exception as e: #pragma: no cover 
             print (e)
             self._client = None
