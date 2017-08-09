@@ -114,31 +114,13 @@ class tableau():
         return self._tableau[X][Y]
 
     def checkMat(self):
+	# Find the position of the King to check if he can be in mat position
         for X in range(0, 8):
             for Y in range(0, 8):
                 pion = self.getPion(X, Y)
                 if type(pion) == roi and ((pion.getColor() == piece._players['NOIR'] and self._curPlayer == -1) or (pion.getColor() == piece._players['BLANC'] and self._curPlayer == 1)):
                     roi_X = X
                     roi_Y = Y
-#                    posPion = set()
-#                    pion.move(X, Y, self, posPion)
-#                    for (posRoiX, posRoiY) in posPion:
-#                        oldValue = self.getPion(posRoiX, posRoiY)
-#                        self.setPion(posRoiX, posRoiY, pion)
-#                        self.setPion(X, Y, None)
-#                        # compute Possible
-#                        possibleBlanc = set()
-#                        possibleNoir = set()
-#                        self.computePossible(piece._players['NOIR'], possibleNoir)
-#                        self.computePossible(piece._players['BLANC'], possibleBlanc)
-#                        self.setPion(X, Y, pion)
-#                        self.setPion(posRoiX, posRoiY, oldValue)
-#
-#                        if self._curPlayer == 1 and not self.isPossible(posRoiX, posRoiY, possibleNoir):
-#                            return False
-#                        if self._curPlayer == -1 and not self.isPossible(posRoiX, posRoiY, possibleBlanc):
-#                            return False
-#                    
         # Check if by moving a piece, there is still mat position
         for X in range(0, 8):
             for Y in range(0, 8):
