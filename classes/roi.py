@@ -22,7 +22,7 @@ class roi(piece):
                         array.remove(item)
                     except KeyError as e:
                         continue
-            except Exception as e:
+            except Exception as e: #pragma: no cover
                 print (e)
 
     def checkRoque(self, tableau, array):

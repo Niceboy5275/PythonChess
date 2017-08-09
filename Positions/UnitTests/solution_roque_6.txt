@@ -1,0 +1,6 @@
+load Chess_Roque_6.chy
+4 7
+4 6
+4 0
+4 1
+quit
