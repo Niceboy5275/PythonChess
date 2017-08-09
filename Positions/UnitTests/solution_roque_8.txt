@@ -1,0 +1,4 @@
+load Chess_Roque_8.chy
+4 7
+4 6
+quit
