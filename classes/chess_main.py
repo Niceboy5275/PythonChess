@@ -1,5 +1,3 @@
-#!/c/Users/vdesoutter/AppData/Local/Programs/Python/Python36/python
-
 from tableau import tableau
 from chess_simple import chess_simple
 from chess_linux import chess_linux

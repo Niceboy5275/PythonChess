@@ -189,13 +189,15 @@ class tableau():
         return True
                     
     def play(self, pos_x, pos_y):
-        if self._client != None and self._curPlayer == 1: #pragma: no cover 
-            self._client.sendData((pos_x, pos_y, self._curPlayer)) # client is white
-        if self._server != None and self._curPlayer == -1: #pragma: no cover 
-            if not self._server.isConnected():
-                self._interface.showMessage ("No client connected to the server")
-                return
-            self._server.sendData((pos_x, pos_y, self._curPlayer)) # server is black
+        if self._client != None:
+            if self._curPlayer == 1: #pragma: no cover 
+                self._client.sendData((pos_x, pos_y, self._curPlayer)) # client is white
+        if self._server != None:
+            if self._curPlayer == -1: #pragma: no cover 
+                if not self._server.isConnected():
+                    self._interface.showMessage ("No client connected to the server")
+                    return
+                self._server.sendData((pos_x, pos_y, self._curPlayer)) # server is black
         if self._selected == False:
             self._possible.clear()
             pionV = self.getPion(pos_x, pos_y)

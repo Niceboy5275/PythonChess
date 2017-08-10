@@ -138,9 +138,10 @@ class chess_tkinter(chessInterface):
         self.fenetre.update()
 
     def button1(self, event):
-        pos_x = int((event.x - 10) / 40)
-        pos_y = int((event.y - 10) / 40)
-        self.queue.put(("play", pos_x, pos_y))
+        if (self._inputEnabled):
+            pos_x = int((event.x - 10) / 40)
+            pos_y = int((event.y - 10) / 40)
+            self.queue.put(("play", pos_x, pos_y))
         
     def getPromoted(self, event):
         while True:
@@ -248,49 +249,42 @@ class chess_tkinter(chessInterface):
 
 
     def mainLoop(self, tableau):
-        while True:
-            self.fenetre.update()
-            try:
-                item = self.queue.get(False)
-                command = item[0]
-                if command == "play":
-                    if tableau.askForAction():
-                        tableau.insertMove(item[1], item[2], tableau.getCurPlayer())
-                        break
-                elif command == "undo":
-                    tableau.undoLastMove()
-                    tableau.insertMove(-2, -2, -1)
-                    break
-                elif command == "open":
-                    tableau.openFile(item[1])
-                    tableau.insertMove(-2, -2, -1)
-                    break
-                elif command == "save":
-                    tableau.saveFile(item[1])
-                    tableau.insertMove(-2, -2, -1)
-                    break
-                elif command == "new":
-                    tableau.reset()
-                    tableau.insertMove(-2, -2, -1)
-                    break
-                elif command == "start_server":
-                    tableau.startServer(int(item[1]))
-                    tableau.insertMove(-2, -2, -1)
-                    break
-                elif command == "stop_server":
-                    tableau.stopServer()
-                    tableau.insertMove(-2, -2, -1)
-                    break
-                elif command == "connect_server":
-                    tableau.startClient(item[1], int(item[2]))
-                    tableau.insertMove(-2, -2, -1)
-                    break
-                elif command == "disconnect_server":
-                    tableau.stopClient()
-                    tableau.insertMove(-2, -2, -1)
-                    break
-            except KeyboardInterrupt:
-                item = (-1,-1)
-            except queue.Empty:
-                time.sleep(0.3)
-                continue
+        self._inputEnabled = tableau.askForAction()
+        self.fenetre.update()
+        try:
+            item = self.queue.get(False)
+            if item != None:
+                print ("Item in Queue : " + str(item))
+            command = item[0]
+            if command == "play":
+                tableau.insertMove(item[1], item[2], tableau.getCurPlayer())
+            elif command == "undo":
+                tableau.undoLastMove()
+                tableau.insertMove(-2, -2, -1)
+            elif command == "open":
+                tableau.openFile(item[1])
+                tableau.insertMove(-2, -2, -1)
+            elif command == "save":
+                tableau.saveFile(item[1])
+                tableau.insertMove(-2, -2, -1)
+            elif command == "new":
+                tableau.reset()
+                tableau.insertMove(-2, -2, -1)
+            elif command == "start_server":
+                tableau.startServer(int(item[1]))
+                self.fenetre.title("Echecs (Blancs)")
+                tableau.insertMove(-2, -2, -1)
+            elif command == "stop_server":
+                tableau.stopServer()
+                tableau.insertMove(-2, -2, -1)
+            elif command == "connect_server":
+                tableau.startClient(item[1], int(item[2]))
+                self.fenetre.title("Echecs (Noirs)")
+                tableau.insertMove(-2, -2, -1)
+            elif command == "disconnect_server":
+                tableau.stopClient()
+                tableau.insertMove(-2, -2, -1)
+        except KeyboardInterrupt:
+            item = (-1,-1)
+        except queue.Empty:
+            time.sleep(0.3)
