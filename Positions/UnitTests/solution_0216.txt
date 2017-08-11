@@ -1,0 +1,4 @@
+load Chess_0216_v2.chy
+e3
+c5
+quit

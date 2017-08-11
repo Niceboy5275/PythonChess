@@ -1,0 +1,4 @@
+load Chess_0208_v2.chy
+d3
+b5
+quit

@@ -1,0 +1,4 @@
+load Chess_0214_v2.chy
+e2
+e8
+quit

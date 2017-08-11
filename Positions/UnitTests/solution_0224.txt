@@ -1,0 +1,4 @@
+load Chess_0224_v2.chy
+c1
+c7
+quit

@@ -1,0 +1,4 @@
+load Chess_0215_v2.chy
+d1
+h1
+quit

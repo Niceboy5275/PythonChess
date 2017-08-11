@@ -1,0 +1,4 @@
+load Chess_0213_v2.chy
+e1
+e8
+quit
