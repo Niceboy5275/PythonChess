@@ -1,0 +1,4 @@
+load Chess_0232_v2.chy
+g7
+d7
+quit

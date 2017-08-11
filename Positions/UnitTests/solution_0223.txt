@@ -1,0 +1,4 @@
+load Chess_0223_v2.chy
+a1
+g7
+quit

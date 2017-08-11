@@ -1,0 +1,4 @@
+load Chess_0233_v2.chy
+b5
+a7
+quit

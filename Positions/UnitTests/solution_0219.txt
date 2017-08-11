@@ -1,0 +1,4 @@
+load Chess_0219_v2.chy
+d4
+h4
+quit

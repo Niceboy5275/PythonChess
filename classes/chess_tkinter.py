@@ -253,8 +253,6 @@ class chess_tkinter(chessInterface):
         self.fenetre.update()
         try:
             item = self.queue.get(False)
-            if item != None:
-                print ("Item in Queue : " + str(item))
             command = item[0]
             if command == "play":
                 tableau.insertMove(item[1], item[2], tableau.getCurPlayer())

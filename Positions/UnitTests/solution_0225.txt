@@ -1,0 +1,4 @@
+load Chess_0225_v2.chy
+e6
+e3
+quit

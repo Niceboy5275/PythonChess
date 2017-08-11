@@ -1,0 +1,4 @@
+load Chess_0234_v2.chy
+c3
+h8
+quit

@@ -1,0 +1,4 @@
+load Chess_0227_v2.chy
+h6
+d6
+quit

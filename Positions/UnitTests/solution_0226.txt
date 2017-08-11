@@ -1,0 +1,4 @@
+load Chess_0226_v2.chy
+a2
+b1
+quit

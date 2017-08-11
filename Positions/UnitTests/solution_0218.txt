@@ -1,0 +1,4 @@
+load Chess_0218_v2.chy
+c5
+a7
+quit

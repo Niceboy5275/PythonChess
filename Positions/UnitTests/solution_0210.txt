@@ -1,0 +1,4 @@
+load Chess_0210_v2.chy
+f5
+h6
+quit

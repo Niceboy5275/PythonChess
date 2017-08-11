@@ -1,0 +1,4 @@
+load Chess_0229_v2.chy
+h7
+h8
+quit
