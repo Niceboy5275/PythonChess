@@ -3,7 +3,7 @@ Name                                                       Stmts   Miss  Cover
 C:\PythonProjects\PythonChess\classes\cavalier.py             14      0   100%
 C:\PythonProjects\PythonChess\classes\chess_interface.py       6      0   100%
 C:\PythonProjects\PythonChess\classes\chess_linux.py         139      0   100%
-C:\PythonProjects\PythonChess\classes\chess_main.py           19      6    68%
+C:\PythonProjects\PythonChess\classes\chess_main.py           12      0   100%
 C:\PythonProjects\PythonChess\classes\chess_recorder.py       19      0   100%
 C:\PythonProjects\PythonChess\classes\chess_server.py          5      0   100%
 C:\PythonProjects\PythonChess\classes\chess_simple.py        127      0   100%
@@ -15,4 +15,4 @@ C:\PythonProjects\PythonChess\classes\roi.py                  71      0   100%
 C:\PythonProjects\PythonChess\classes\tableau.py             356      0   100%
 C:\PythonProjects\PythonChess\classes\tour.py                 32      0   100%
 ------------------------------------------------------------------------------
-TOTAL                                                        934      6    99%
+TOTAL                                                        927      0   100%
