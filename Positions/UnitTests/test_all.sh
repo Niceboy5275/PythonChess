@@ -83,5 +83,5 @@ do
 done
 echo ""
 coverage3.exe report > ../../coverage.txt
-cat coverage.txt
+cat ../../coverage.txt
 coverage3.exe html
