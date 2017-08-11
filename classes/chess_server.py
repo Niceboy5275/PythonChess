@@ -30,7 +30,6 @@ class chessServer(Thread): #pragma: no cover
                 while self._running:
                     data = self._server.recv(512)
                     if data != None and len(data) != 0:
-                        print ("SERVER : Data received" + str(data.decode()))
                         self._q.put(ast.literal_eval(data.decode()))
                     sleep(1)
             except KeyboardInterrupt:
@@ -49,7 +48,6 @@ class chessServer(Thread): #pragma: no cover
 
     def sendData(self, data):
         if self._server != None:
-            print ("SERVER : Data sent" + str(data))
             self._server.send(str(data).encode())
 
     def start(self):
@@ -95,7 +93,6 @@ class chessClient(Thread): #pragma: no cover
                 try:
                     data = self._client.recv(512)
                     if data != None and len(data) != 0:
-                        print ("CLIENT data received : " + str(data.decode()))
                         self._q.put(ast.literal_eval(data.decode()))
                 except KeyboardInterrupt:
                     self._q.put((-1, -1, -1))
@@ -115,5 +112,4 @@ class chessClient(Thread): #pragma: no cover
 
     def sendData(self, data):
         if self._client != None:
-            print ("CLIENT data sent : " + str(data))
             self._client.send(str(data).encode())
