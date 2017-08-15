@@ -1,18 +1,18 @@
-Name                                                       Stmts   Miss  Cover
-------------------------------------------------------------------------------
-C:\PythonProjects\PythonChess\classes\cavalier.py             14      0   100%
-C:\PythonProjects\PythonChess\classes\chess_interface.py       6      0   100%
-C:\PythonProjects\PythonChess\classes\chess_linux.py         139      0   100%
-C:\PythonProjects\PythonChess\classes\chess_main.py           12      0   100%
-C:\PythonProjects\PythonChess\classes\chess_recorder.py       19      0   100%
-C:\PythonProjects\PythonChess\classes\chess_server.py          5      0   100%
-C:\PythonProjects\PythonChess\classes\chess_simple.py        127      0   100%
-C:\PythonProjects\PythonChess\classes\fou.py                  34      0   100%
-C:\PythonProjects\PythonChess\classes\piece.py                15      0   100%
-C:\PythonProjects\PythonChess\classes\pion.py                 39      0   100%
-C:\PythonProjects\PythonChess\classes\reine.py                58      0   100%
-C:\PythonProjects\PythonChess\classes\roi.py                  71      0   100%
-C:\PythonProjects\PythonChess\classes\tableau.py             356      0   100%
-C:\PythonProjects\PythonChess\classes\tour.py                 32      0   100%
-------------------------------------------------------------------------------
-TOTAL                                                        927      0   100%
+Name                                                              Stmts   Miss  Cover
+-------------------------------------------------------------------------------------
+D:\DossierWindows\Bureau\PythonChess\classes\cavalier.py             14      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\chess_interface.py       6      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\chess_linux.py         139      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\chess_main.py           12      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\chess_recorder.py       19      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\chess_server.py          5      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\chess_simple.py        127      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\fou.py                  34      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\piece.py                15      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\pion.py                 39      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\reine.py                58      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\roi.py                  71      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\tableau.py             361      0   100%
+D:\DossierWindows\Bureau\PythonChess\classes\tour.py                 32      0   100%
+-------------------------------------------------------------------------------------
+TOTAL                                                               932      0   100%

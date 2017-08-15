@@ -1,4 +1,5 @@
 load Chess_0001_v2.chy
 5 2
 6 1
+4 3
 quit

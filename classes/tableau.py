@@ -25,6 +25,7 @@ class tableau():
     _client = None
     _recorder = recorder()
     _currentMove = []
+    _echecEtMat = False
     
     def __init__(self, interface):
         self.reset()
@@ -76,6 +77,7 @@ class tableau():
         self._tableau[6][7]=cavalier(piece._players['BLANC'])
         self._tableau[7][7]=tour(piece._players['BLANC'])
         self._curPlayer = -1
+        self._echecEtMat = False
 
     def computePossible(self, color, array):
         for X in range(0, 8):
@@ -270,6 +272,7 @@ class tableau():
                     self._selectedPion.setMoved()
                     if (self.checkMat()):
                         self._interface.showMessage("Echec et mat !")
+                        self._echecEtMat = True
                     else :
                         self._interface.showMessage("Echec !")
                     self.changePlayer()
@@ -378,7 +381,10 @@ class tableau():
             elif item[0] == -2:
                 pass
             else:
-                self.play(item[0], item[1])
+                if not self._echecEtMat:
+                    self.play(item[0], item[1])
+                else:
+                    self._interface.showMessage("Echec et mat !")                    
             self._interface.draw(self)
 
     def askForAction(self):
