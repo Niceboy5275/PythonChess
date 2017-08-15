@@ -5,7 +5,7 @@ do
     echo -n '.'
     coverage3.exe run -a --omit *chess_tkinter.py* ../../classes/chess_main.py simple < $file > output_simple_$file
     nbLines=`cat output_simple_$file | grep "Echec et mat !" | wc -l`
-    if [ $nbLines -ne 1 ]
+    if [ $nbLines -eq 0 ]
     then
         echo -n 'F1S'
     fi
@@ -46,7 +46,7 @@ do
     echo -n '.'
     coverage3.exe run -a --omit *chess_tkinter.py* ../../classes/chess_main.py linux < $file > output_linux_$file
     nbLines=`cat output_linux_$file | grep "Echec et mat !" | wc -l`
-    if [ $nbLines -ne 1 ]
+    if [ $nbLines -eq 0 ]
     then
         echo -n 'F1L'
     fi

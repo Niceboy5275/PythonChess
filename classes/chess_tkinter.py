@@ -63,6 +63,10 @@ class chess_tkinter(chessInterface):
         self.curPlayerName.set("Joueur blanc")
         self.label = Label(self.fenetre, textvariable=self.curPlayerName)
         self.label.grid(row=2, column = 1, columnspan=2, sticky=N)
+        self.message=StringVar()
+        self.message.set("")
+        self.labelMessage = Label(self.fenetre, textvariable=self.message, fg = "red", font = "Verdana 10 bold")
+        self.labelMessage.grid(row=3, column = 1, columnspan=2, sticky=N)
         self.fenetre.bind('<Button-1>', self.button1)
 
     def newGame(self):
@@ -131,14 +135,12 @@ class chess_tkinter(chessInterface):
         self.queue.put(("disconnect_server", ))
         
     def showMessage(self, message):
-        toplevel = Toplevel()
-        toplevel.title("Warning !")
-        label1 = Label(toplevel, text=message)
-        label1.pack()
+        self.message.set(message)
         self.fenetre.update()
 
     def button1(self, event):
         if (self._inputEnabled):
+            self.showMessage("")
             pos_x = int((event.x - 10) / 40)
             pos_y = int((event.y - 10) / 40)
             self.queue.put(("play", pos_x, pos_y))
