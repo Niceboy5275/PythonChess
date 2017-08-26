@@ -7,6 +7,10 @@ class chessInterface(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def clearMessage(self, message): #pragma: no cover
+        pass
+
+    @abstractmethod
     def draw(self): #pragma: no cover
         pass
 

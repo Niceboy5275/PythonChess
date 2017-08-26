@@ -421,6 +421,8 @@ class tableau():
                     pionV = pion(color)
                 self.setPion(move[0], move[1], pionV, False)
             self.changePlayer(False)
+            self._echecEtMat = False
+            self._interface.clearMessage()
         else:
             self._interface.showMessage ("No moves recorded")
 

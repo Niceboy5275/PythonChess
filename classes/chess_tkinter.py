@@ -138,6 +138,9 @@ class chess_tkinter(chessInterface):
         self.message.set(message)
         self.fenetre.update()
 
+    def clearMessage(self):
+        self.showMessage("")
+
     def button1(self, event):
         if (self._inputEnabled):
             self.showMessage("")

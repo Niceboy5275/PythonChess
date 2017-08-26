@@ -17,6 +17,9 @@ class chess_linux(chessInterface):
     def showMessage(self, message):
         print(message)
 
+    def clearMessage(self):
+        pass
+
     def showPromotion(self, tableau):
         try:
             curPlayer = tableau.getCurPlayer()

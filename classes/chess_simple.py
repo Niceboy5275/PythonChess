@@ -14,6 +14,9 @@ class chess_simple(chessInterface):
     def showMessage(self, message):
         print(message)
 
+    def clearMessage(self):
+        pass
+
     def showPromotion(self, tableau):
         curPlayer = tableau.getCurPlayer()
         print("Enter the type of piece you want (T, C, F, Q) :")
